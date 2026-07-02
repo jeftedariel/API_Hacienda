@@ -1,11 +1,12 @@
 <?php
+
 namespace CRLibre\XmlSecLibs;
 
+use CRLibre\XmlSecLibs\Utils\XPath;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
 use Exception;
-use CRLibre\XmlSecLibs\Utils\XPath as XPath;
 
 /**
  * xmlseclibs.php
@@ -46,7 +47,6 @@ use CRLibre\XmlSecLibs\Utils\XPath as XPath;
  * @copyright 2007-2019 Robert Richards <rrichards@cdatazone.org>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
-
 class XMLSecEnc
 {
     const template = "<xenc:EncryptedData xmlns:xenc='http://www.w3.org/2001/04/xmlenc#'>
@@ -56,14 +56,17 @@ class XMLSecEnc
 </xenc:EncryptedData>";
 
     const Element = 'http://www.w3.org/2001/04/xmlenc#Element';
+
     const Content = 'http://www.w3.org/2001/04/xmlenc#Content';
+
     const URI = 3;
+
     const XMLENCNS = 'http://www.w3.org/2001/04/xmlenc#';
 
     /** @var null|DOMDocument */
     private $encdoc = null;
 
-    /** @var null|DOMNode  */
+    /** @var null|DOMNode */
     private $rawNode = null;
 
     /** @var null|string */
@@ -73,7 +76,7 @@ class XMLSecEnc
     public $encKey = null;
 
     /** @var array */
-    private $references = array();
+    private $references = [];
 
     public function __construct()
     {
@@ -82,19 +85,20 @@ class XMLSecEnc
 
     private function _resetTemplate()
     {
-        $this->encdoc = new DOMDocument();
+        $this->encdoc = new DOMDocument;
         $this->encdoc->loadXML(self::template);
     }
 
     /**
-     * @param string $name
-     * @param DOMNode $node
-     * @param string $type
+     * @param  string  $name
+     * @param  DOMNode  $node
+     * @param  string  $type
+     *
      * @throws Exception
      */
     public function addReference($name, $node, $type)
     {
-        if (! $node instanceOf DOMNode) {
+        if (! $node instanceof DOMNode) {
             throw new Exception('$node is not of type DOMNode');
         }
         $curencdoc = $this->encdoc;
@@ -103,12 +107,12 @@ class XMLSecEnc
         $this->encdoc = $curencdoc;
         $refuri = XMLSecurityDSig::generateGUID();
         $element = $encdoc->documentElement;
-        $element->setAttribute("Id", $refuri);
-        $this->references[$name] = array("node" => $node, "type" => $type, "encnode" => $encdoc, "refuri" => $refuri);
+        $element->setAttribute('Id', $refuri);
+        $this->references[$name] = ['node' => $node, 'type' => $type, 'encnode' => $encdoc, 'refuri' => $refuri];
     }
 
     /**
-     * @param DOMNode $node
+     * @param  DOMNode  $node
      */
     public function setNode($node)
     {
@@ -118,11 +122,11 @@ class XMLSecEnc
     /**
      * Encrypt the selected node with the given key.
      *
-     * @param XMLSecurityKey $objKey  The encryption key and algorithm.
-     * @param bool           $replace Whether the encrypted node should be replaced in the original tree. Default is true.
-     * @throws Exception
+     * @param  XMLSecurityKey  $objKey  The encryption key and algorithm.
+     * @param  bool  $replace  Whether the encrypted node should be replaced in the original tree. Default is true.
+     * @return DOMElement The <xenc:EncryptedData>-element.
      *
-     * @return DOMElement  The <xenc:EncryptedData>-element.
+     * @throws Exception
      */
     public function encryptNode($objKey, $replace = true)
     {
@@ -141,13 +145,13 @@ class XMLSecEnc
             throw new Exception('Error locating CipherValue element within template');
         }
         switch ($this->type) {
-            case (self::Element):
+            case self::Element:
                 $data = $doc->saveXML($this->rawNode);
                 $this->encdoc->documentElement->setAttribute('Type', self::Element);
                 break;
-            case (self::Content):
+            case self::Content:
                 $children = $this->rawNode->childNodes;
-                foreach ($children AS $child) {
+                foreach ($children as $child) {
                     $data .= $doc->saveXML($child);
                 }
                 $this->encdoc->documentElement->setAttribute('Type', self::Content);
@@ -166,19 +170,21 @@ class XMLSecEnc
 
         if ($replace) {
             switch ($this->type) {
-                case (self::Element):
+                case self::Element:
                     if ($this->rawNode->nodeType == XML_DOCUMENT_NODE) {
                         return $this->encdoc;
                     }
                     $importEnc = $this->rawNode->ownerDocument->importNode($this->encdoc->documentElement, true);
                     $this->rawNode->parentNode->replaceChild($importEnc, $this->rawNode);
+
                     return $importEnc;
-                case (self::Content):
+                case self::Content:
                     $importEnc = $this->rawNode->ownerDocument->importNode($this->encdoc->documentElement, true);
                     while ($this->rawNode->firstChild) {
                         $this->rawNode->removeChild($this->rawNode->firstChild);
                     }
                     $this->rawNode->appendChild($importEnc);
+
                     return $importEnc;
             }
         } else {
@@ -187,20 +193,21 @@ class XMLSecEnc
     }
 
     /**
-     * @param XMLSecurityKey $objKey
+     * @param  XMLSecurityKey  $objKey
+     *
      * @throws Exception
      */
     public function encryptReferences($objKey)
     {
         $curRawNode = $this->rawNode;
         $curType = $this->type;
-        foreach ($this->references AS $name => $reference) {
-            $this->encdoc = $reference["encnode"];
-            $this->rawNode = $reference["node"];
-            $this->type = $reference["type"];
+        foreach ($this->references as $name => $reference) {
+            $this->encdoc = $reference['encnode'];
+            $this->rawNode = $reference['node'];
+            $this->type = $reference['type'];
             try {
                 $encNode = $this->encryptNode($objKey);
-                $this->references[$name]["encnode"] = $encNode;
+                $this->references[$name]['encnode'] = $encNode;
             } catch (Exception $e) {
                 $this->rawNode = $curRawNode;
                 $this->type = $curType;
@@ -214,8 +221,9 @@ class XMLSecEnc
     /**
      * Retrieve the CipherValue text from this encrypted node.
      *
+     * @return string|null The Ciphervalue text, or null if no CipherValue is found.
+     *
      * @throws Exception
-     * @return string|null  The Ciphervalue text, or null if no CipherValue is found.
      */
     public function getCipherValue()
     {
@@ -227,12 +235,12 @@ class XMLSecEnc
         $xPath = new DOMXPath($doc);
         $xPath->registerNamespace('xmlencr', self::XMLENCNS);
         /* Only handles embedded content right now and not a reference */
-        $query = "./xmlencr:CipherData/xmlencr:CipherValue";
+        $query = './xmlencr:CipherData/xmlencr:CipherValue';
         $nodeset = $xPath->query($query, $this->rawNode);
         $node = $nodeset->item(0);
 
-        if (!$node) {
-                return null;
+        if (! $node) {
+            return null;
         }
 
         return base64_decode($node->nodeValue);
@@ -246,12 +254,11 @@ class XMLSecEnc
      * If $replace is true, we will insert the decrypted element(s) into the
      * document, and return the decrypted element(s).
      *
-     * @param XMLSecurityKey $objKey  The decryption key that should be used when decrypting the node.
-     * @param boolean        $replace Whether we should replace the encrypted node in the XML document with the decrypted data. The default is true.
-     *
-     * @return string|DOMElement  The decrypted data.
+     * @param  XMLSecurityKey  $objKey  The decryption key that should be used when decrypting the node.
+     * @param  bool  $replace  Whether we should replace the encrypted node in the XML document with the decrypted data. The default is true.
+     * @return string|DOMElement The decrypted data.
      */
-    public function decryptNode($objKey, $replace=true)
+    public function decryptNode($objKey, $replace = true)
     {
         if (! $objKey instanceof XMLSecurityKey) {
             throw new Exception('Invalid Key');
@@ -262,16 +269,17 @@ class XMLSecEnc
             $decrypted = $objKey->decryptData($encryptedData);
             if ($replace) {
                 switch ($this->type) {
-                    case (self::Element):
-                        $newdoc = new DOMDocument();
+                    case self::Element:
+                        $newdoc = new DOMDocument;
                         $newdoc->loadXML($decrypted);
                         if ($this->rawNode->nodeType == XML_DOCUMENT_NODE) {
                             return $newdoc;
                         }
                         $importEnc = $this->rawNode->ownerDocument->importNode($newdoc->documentElement, true);
                         $this->rawNode->parentNode->replaceChild($importEnc, $this->rawNode);
+
                         return $importEnc;
-                    case (self::Content):
+                    case self::Content:
                         if ($this->rawNode->nodeType == XML_DOCUMENT_NODE) {
                             $doc = $this->rawNode;
                         } else {
@@ -281,6 +289,7 @@ class XMLSecEnc
                         $newFrag->appendXML($decrypted);
                         $parent = $this->rawNode->parentNode;
                         $parent->replaceChild($newFrag, $this->rawNode);
+
                         return $parent;
                     default:
                         return $decrypted;
@@ -289,19 +298,20 @@ class XMLSecEnc
                 return $decrypted;
             }
         } else {
-            throw new Exception("Cannot locate encrypted data");
+            throw new Exception('Cannot locate encrypted data');
         }
     }
 
     /**
      * Encrypt the XMLSecurityKey
      *
-     * @param XMLSecurityKey $srcKey
-     * @param XMLSecurityKey $rawKey
-     * @param bool $append
+     * @param  XMLSecurityKey  $srcKey
+     * @param  XMLSecurityKey  $rawKey
+     * @param  bool  $append
+     *
      * @throws Exception
      */
-    public function encryptKey($srcKey, $rawKey, $append=true)
+    public function encryptKey($srcKey, $rawKey, $append = true)
     {
         if ((! $srcKey instanceof XMLSecurityKey) || (! $rawKey instanceof XMLSecurityKey)) {
             throw new Exception('Invalid Key');
@@ -325,33 +335,35 @@ class XMLSecEnc
         $cipherData->appendChild($this->encdoc->createElementNS(self::XMLENCNS, 'xenc:CipherValue', $strEncKey));
         if (is_array($this->references) && count($this->references) > 0) {
             $refList = $encKey->appendChild($this->encdoc->createElementNS(self::XMLENCNS, 'xenc:ReferenceList'));
-            foreach ($this->references AS $name => $reference) {
-                $refuri = $reference["refuri"];
+            foreach ($this->references as $name => $reference) {
+                $refuri = $reference['refuri'];
                 $dataRef = $refList->appendChild($this->encdoc->createElementNS(self::XMLENCNS, 'xenc:DataReference'));
-                $dataRef->setAttribute("URI", '#' . $refuri);
+                $dataRef->setAttribute('URI', '#'.$refuri);
             }
         }
-        return;
+
     }
 
     /**
-     * @param XMLSecurityKey $encKey
+     * @param  XMLSecurityKey  $encKey
      * @return DOMElement|string
+     *
      * @throws Exception
      */
     public function decryptKey($encKey)
     {
         if (! $encKey->isEncrypted) {
-            throw new Exception("Key is not Encrypted");
+            throw new Exception('Key is not Encrypted');
         }
         if (empty($encKey->key)) {
-            throw new Exception("Key is missing data to perform the decryption");
+            throw new Exception('Key is missing data to perform the decryption');
         }
+
         return $this->decryptNode($encKey, false);
     }
 
     /**
-     * @param DOMDocument $element
+     * @param  DOMDocument  $element
      * @return DOMNode|null
      */
     public function locateEncryptedData($element)
@@ -365,17 +377,20 @@ class XMLSecEnc
             $xpath = new DOMXPath($doc);
             $query = "//*[local-name()='EncryptedData' and namespace-uri()='".self::XMLENCNS."']";
             $nodeset = $xpath->query($query);
+
             return $nodeset->item(0);
         }
+
         return null;
     }
 
     /**
      * Returns the key from the DOM
-     * @param null|DOMNode $node
+     *
+     * @param  null|DOMNode  $node
      * @return null|XMLSecurityKey
      */
-    public function locateKey($node=null)
+    public function locateKey($node = null)
     {
         if (empty($node)) {
             $node = $this->rawNode;
@@ -386,49 +401,52 @@ class XMLSecEnc
         if ($doc = $node->ownerDocument) {
             $xpath = new DOMXPath($doc);
             $xpath->registerNamespace('xmlsecenc', self::XMLENCNS);
-            $query = ".//xmlsecenc:EncryptionMethod";
+            $query = './/xmlsecenc:EncryptionMethod';
             $nodeset = $xpath->query($query, $node);
             if ($encmeth = $nodeset->item(0)) {
-                   $attrAlgorithm = $encmeth->getAttribute("Algorithm");
+                $attrAlgorithm = $encmeth->getAttribute('Algorithm');
                 try {
-                    $objKey = new XMLSecurityKey($attrAlgorithm, array('type' => 'private'));
+                    $objKey = new XMLSecurityKey($attrAlgorithm, ['type' => 'private']);
                 } catch (Exception $e) {
                     return null;
                 }
+
                 return $objKey;
             }
         }
+
         return null;
     }
 
     /**
-     * @param null|XMLSecurityKey $objBaseKey
-     * @param null|DOMNode $node
+     * @param  null|XMLSecurityKey  $objBaseKey
+     * @param  null|DOMNode  $node
      * @return null|XMLSecurityKey
+     *
      * @throws Exception
      */
-    public static function staticLocateKeyInfo($objBaseKey=null, $node=null)
+    public static function staticLocateKeyInfo($objBaseKey = null, $node = null)
     {
         if (empty($node) || (! $node instanceof DOMNode)) {
             return null;
         }
         $doc = $node->ownerDocument;
-        if (!$doc) {
+        if (! $doc) {
             return null;
         }
 
         $xpath = new DOMXPath($doc);
         $xpath->registerNamespace('xmlsecenc', self::XMLENCNS);
         $xpath->registerNamespace('xmlsecdsig', XMLSecurityDSig::XMLDSIGNS);
-        $query = "./xmlsecdsig:KeyInfo";
+        $query = './xmlsecdsig:KeyInfo';
         $nodeset = $xpath->query($query, $node);
         $encmeth = $nodeset->item(0);
-        if (!$encmeth) {
+        if (! $encmeth) {
             /* No KeyInfo in EncryptedData / EncryptedKey. */
             return $objBaseKey;
         }
 
-        foreach ($encmeth->childNodes AS $child) {
+        foreach ($encmeth->childNodes as $child) {
             switch ($child->localName) {
                 case 'KeyName':
                     if (! empty($objBaseKey)) {
@@ -436,10 +454,10 @@ class XMLSecEnc
                     }
                     break;
                 case 'KeyValue':
-                    foreach ($child->childNodes AS $keyval) {
+                    foreach ($child->childNodes as $keyval) {
                         switch ($keyval->localName) {
                             case 'DSAKeyValue':
-                                throw new Exception("DSAKeyValue currently not supported");
+                                throw new Exception('DSAKeyValue currently not supported');
                             case 'RSAKeyValue':
                                 $modulus = null;
                                 $exponent = null;
@@ -450,7 +468,7 @@ class XMLSecEnc
                                     $exponent = base64_decode($exponentNode->nodeValue);
                                 }
                                 if (empty($modulus) || empty($exponent)) {
-                                    throw new Exception("Missing Modulus or Exponent");
+                                    throw new Exception('Missing Modulus or Exponent');
                                 }
                                 $publicKey = XMLSecurityKey::convertRSA($modulus, $exponent);
                                 $objBaseKey->loadKey($publicKey);
@@ -473,7 +491,7 @@ class XMLSecEnc
 
                     $query = '//xmlsecenc:EncryptedKey[@Id="'.XPath::filterAttrValue($id, XPath::DOUBLE_QUOTE).'"]';
                     $keyElement = $xpath->query($query)->item(0);
-                    if (!$keyElement) {
+                    if (! $keyElement) {
                         throw new Exception("Unable to locate EncryptedKey with @Id='$id'.");
                     }
 
@@ -484,7 +502,7 @@ class XMLSecEnc
                     if ($x509certNodes = $child->getElementsByTagName('X509Certificate')) {
                         if ($x509certNodes->length > 0) {
                             $x509cert = $x509certNodes->item(0)->textContent;
-                            $x509cert = str_replace(array("\r", "\n", " "), "", $x509cert);
+                            $x509cert = str_replace(["\r", "\n", ' '], '', $x509cert);
                             $x509cert = "-----BEGIN CERTIFICATE-----\n".chunk_split($x509cert, 64, "\n")."-----END CERTIFICATE-----\n";
                             $objBaseKey->loadKey($x509cert, false, true);
                         }
@@ -492,19 +510,21 @@ class XMLSecEnc
                     break;
             }
         }
+
         return $objBaseKey;
     }
 
     /**
-     * @param null|XMLSecurityKey $objBaseKey
-     * @param null|DOMNode $node
+     * @param  null|XMLSecurityKey  $objBaseKey
+     * @param  null|DOMNode  $node
      * @return null|XMLSecurityKey
      */
-    public function locateKeyInfo($objBaseKey=null, $node=null)
+    public function locateKeyInfo($objBaseKey = null, $node = null)
     {
         if (empty($node)) {
             $node = $this->rawNode;
         }
+
         return self::staticLocateKeyInfo($objBaseKey, $node);
     }
 }

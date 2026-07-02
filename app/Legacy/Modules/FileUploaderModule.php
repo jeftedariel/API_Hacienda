@@ -18,8 +18,7 @@ class FileUploaderModule implements LegacyModule
     public function __construct(
         private readonly FileStorageService $files,
         private readonly LegacyAuthService $auth,
-    ) {
-    }
+    ) {}
 
     public function routes(): array
     {

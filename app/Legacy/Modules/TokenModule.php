@@ -12,9 +12,7 @@ use App\Services\Hacienda\TokenService;
  */
 class TokenModule implements LegacyModule
 {
-    public function __construct(private readonly TokenService $tokens)
-    {
-    }
+    public function __construct(private readonly TokenService $tokens) {}
 
     public function routes(): array
     {

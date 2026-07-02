@@ -36,6 +36,31 @@ class CatalogSeeder extends Seeder
                 JSON_THROW_ON_ERROR
             );
 
+            // Normaliza al mismo conjunto de columnas (algunas filas del dump
+            // legacy traen menos campos) y descarta el id del dump para dejar
+            // que el autoincremento asigne uno limpio.
+            $columns = array_values(array_filter(
+                array_keys($rows[0] ?? []),
+                fn ($c) => $c !== 'id'
+            ));
+            $rows = array_map(function (array $row) use ($columns): array {
+                $normalized = [];
+                foreach ($columns as $col) {
+                    $normalized[$col] = $row[$col] ?? '';
+                }
+
+                return $normalized;
+            }, $rows);
+
+            // codificacion_mh: descarta filas sin provincia (artefactos de
+            // parseo de valores con comas/comillas en el dump legacy).
+            if ($table === 'codificacion_mh') {
+                $rows = array_values(array_filter(
+                    $rows,
+                    fn ($r) => ($r['id_provincia'] ?? '') !== ''
+                ));
+            }
+
             foreach (array_chunk($rows, 500) as $chunk) {
                 DB::table($table)->insert($chunk);
             }

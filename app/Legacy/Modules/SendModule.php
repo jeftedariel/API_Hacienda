@@ -24,9 +24,7 @@ class SendModule implements LegacyModule
         ['key' => 'client_id', 'def' => '', 'req' => true],
     ];
 
-    public function __construct(private readonly ReceptionClient $reception)
-    {
-    }
+    public function __construct(private readonly ReceptionClient $reception) {}
 
     public function routes(): array
     {

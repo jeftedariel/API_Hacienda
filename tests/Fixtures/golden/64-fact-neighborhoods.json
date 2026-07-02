@@ -1,0 +1,24 @@
+{
+    "name": "fact-neighborhoods",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "get_neighborhood",
+            "idProvince": "1",
+            "idCanton": "01",
+            "idDistrito": "01"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":[{\"nombreBarrio\":\"CARMEN\",\"idBarrio\":\"00\"},{\"nombreBarrio\":\"Amon\",\"idBarrio\":\"01\"},{\"nombreBarrio\":\"Aranjuez\",\"idBarrio\":\"02\"},{\"nombreBarrio\":\"California (parte)\",\"idBarrio\":\"03\"},{\"nombreBarrio\":\"Carmen\",\"idBarrio\":\"04\"},{\"nombreBarrio\":\"Empalme\",\"idBarrio\":\"05\"},{\"nombreBarrio\":\"Escalante\",\"idBarrio\":\"06\"},{\"nombreBarrio\":\"Otoya\",\"idBarrio\":\"07\"}]}"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "legacy"
+    ],
+    "notName": [
+        "genxml_functions.php",
+        "*_routes.php"
+    ]
+}

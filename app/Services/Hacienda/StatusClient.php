@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Http;
  */
 class StatusClient
 {
-    public function __construct(private readonly HaciendaEnvironment $env)
-    {
-    }
+    public function __construct(private readonly HaciendaEnvironment $env) {}
 
     public function consultar(string $clave, string $clientId, string $token): mixed
     {

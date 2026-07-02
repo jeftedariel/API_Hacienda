@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Mail;
  */
 class UsersModule implements LegacyModule
 {
-    public function __construct(private readonly LegacyAuthService $auth)
-    {
-    }
+    public function __construct(private readonly LegacyAuthService $auth) {}
 
     public function routes(): array
     {

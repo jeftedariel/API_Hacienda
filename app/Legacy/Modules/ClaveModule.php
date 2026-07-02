@@ -12,9 +12,7 @@ use App\Services\Clave\ClaveService;
  */
 class ClaveModule implements LegacyModule
 {
-    public function __construct(private readonly ClaveService $clave)
-    {
-    }
+    public function __construct(private readonly ClaveService $clave) {}
 
     public function routes(): array
     {

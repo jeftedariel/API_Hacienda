@@ -2,6 +2,7 @@
 
 namespace App\Legacy;
 
+use App\Services\Auth\LegacyAuthService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LegacyApiController
 {
-    public function __construct(private readonly LegacyDispatcher $dispatcher)
-    {
-    }
+    public function __construct(private readonly LegacyDispatcher $dispatcher) {}
 
     public function __invoke(Request $request): Response
     {
@@ -48,7 +47,7 @@ class LegacyApiController
         }
 
         try {
-            $auth = app(\App\Services\Auth\LegacyAuthService::class);
+            $auth = app(LegacyAuthService::class);
             $auth->touchLastAccess($sessionKey, $auth->loadByUserNameOrEmail($iam));
         } catch (\Throwable) {
             // Sin BD disponible no hay sesión que refrescar.

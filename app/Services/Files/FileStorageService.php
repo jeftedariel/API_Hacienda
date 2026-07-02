@@ -53,7 +53,7 @@ class FileStorageService
      * storage/app/legacy-files/<user>/<type>/ y registra en stored_files.
      *
      * @return array{idFile: string, name: string, downloadCode: string}|string
-     *         El shape legacy de éxito, o el código de error como string.
+     *                                                                          El shape legacy de éxito, o el código de error como string.
      */
     public function upload(
         User $user,

@@ -1,0 +1,21 @@
+{
+    "name": "fact-provinces",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "get_all_privinces"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":[{\"idProvincia\":\"1\",\"nombreProvincia\":\"San jose\"},{\"idProvincia\":\"2\",\"nombreProvincia\":\"Alajuela\"},{\"idProvincia\":\"3\",\"nombreProvincia\":\"Cartago\"},{\"idProvincia\":\"4\",\"nombreProvincia\":\"Heredia\"},{\"idProvincia\":\"5\",\"nombreProvincia\":\"Guanacaste\"},{\"idProvincia\":\"6\",\"nombreProvincia\":\"Puntarenas\"},{\"idProvincia\":\"7\",\"nombreProvincia\":\"Limon\"}]}"
+    }
+}

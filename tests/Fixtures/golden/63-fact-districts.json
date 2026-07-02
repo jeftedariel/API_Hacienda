@@ -1,0 +1,23 @@
+{
+    "name": "fact-districts",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "get_district",
+            "idProvince": "1",
+            "idCanton": "01"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":[{\"nombreDistrito\":\"San Jose\",\"idDistrito\":\"00\"},{\"nombreDistrito\":\"Carmen\",\"idDistrito\":\"01\"},{\"nombreDistrito\":\"Merced\",\"idDistrito\":\"02\"},{\"nombreDistrito\":\"Hospital\",\"idDistrito\":\"03\"},{\"nombreDistrito\":\"Catedral\",\"idDistrito\":\"04\"},{\"nombreDistrito\":\"Zapote\",\"idDistrito\":\"05\"},{\"nombreDistrito\":\"San Francisco de Dos Rios\",\"idDistrito\":\"06\"},{\"nombreDistrito\":\"Uruca\",\"idDistrito\":\"07\"},{\"nombreDistrito\":\"Mata Redonda\",\"idDistrito\":\"08\"},{\"nombreDistrito\":\"Pavas\",\"idDistrito\":\"09\"},{\"nombreDistrito\":\"Hatillo\",\"idDistrito\":\"010\"},{\"nombreDistrito\":\"San Sebastian\",\"idDistrito\":\"011\"}]}"
+    }
+}

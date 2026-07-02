@@ -17,9 +17,7 @@ use App\Services\Xsd\XsdValidatorService;
  */
 class CheckModule implements LegacyModule
 {
-    public function __construct(private readonly XsdValidatorService $validator)
-    {
-    }
+    public function __construct(private readonly XsdValidatorService $validator) {}
 
     public function routes(): array
     {

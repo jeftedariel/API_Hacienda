@@ -15,9 +15,7 @@ namespace App\Services;
  */
 class LegacyCrypto
 {
-    public function __construct(private readonly string $key)
-    {
-    }
+    public function __construct(private readonly string $key) {}
 
     public static function fromConfig(): self
     {

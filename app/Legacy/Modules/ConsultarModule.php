@@ -12,9 +12,7 @@ use App\Services\Hacienda\StatusClient;
  */
 class ConsultarModule implements LegacyModule
 {
-    public function __construct(private readonly StatusClient $status)
-    {
-    }
+    public function __construct(private readonly StatusClient $status) {}
 
     public function routes(): array
     {

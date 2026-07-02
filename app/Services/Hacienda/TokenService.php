@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Http;
  */
 class TokenService
 {
-    public function __construct(private readonly HaciendaEnvironment $env)
-    {
-    }
+    public function __construct(private readonly HaciendaEnvironment $env) {}
 
     /**
      * @param  array{client_id: string, grant_type: string, client_secret?: string,

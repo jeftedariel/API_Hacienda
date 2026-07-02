@@ -21,8 +21,7 @@ class FirmarXmlModule implements LegacyModule
     public function __construct(
         private readonly XadesSignerService $signer,
         private readonly FileStorageService $files,
-    ) {
-    }
+    ) {}
 
     public function routes(): array
     {

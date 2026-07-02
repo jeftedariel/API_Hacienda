@@ -17,9 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class FilesModule implements LegacyModule
 {
-    public function __construct(private readonly FileStorageService $files)
-    {
-    }
+    public function __construct(private readonly FileStorageService $files) {}
 
     public function routes(): array
     {

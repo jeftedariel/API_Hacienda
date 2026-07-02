@@ -27,6 +27,5 @@ class LegacyRoute
         public readonly \Closure $action,
         public readonly string $access = self::ACCESS_OPEN,
         public readonly array $params = [],
-    ) {
-    }
+    ) {}
 }

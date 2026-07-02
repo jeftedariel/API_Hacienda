@@ -1,0 +1,22 @@
+{
+    "name": "fact-cantons",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "get_cantons",
+            "idProvince": "1"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":[{\"nombreCanton\":\"San Jose\",\"idCanton\":\"00\"},{\"nombreCanton\":\"San Jose\",\"idCanton\":\"01\"},{\"nombreCanton\":\"Escazu\",\"idCanton\":\"02\"},{\"nombreCanton\":\"Desamparados\",\"idCanton\":\"03\"},{\"nombreCanton\":\"Puriscal\",\"idCanton\":\"04\"},{\"nombreCanton\":\"Tarrazu\",\"idCanton\":\"05\"},{\"nombreCanton\":\"Aserri\",\"idCanton\":\"06\"},{\"nombreCanton\":\"Mora\",\"idCanton\":\"07\"},{\"nombreCanton\":\"Goicochea\",\"idCanton\":\"08\"},{\"nombreCanton\":\"Santa Ana\",\"idCanton\":\"09\"},{\"nombreCanton\":\"Alajuelita\",\"idCanton\":\"010\"},{\"nombreCanton\":\"Vasquez de Coronado\",\"idCanton\":\"011\"},{\"nombreCanton\":\"Acosta\",\"idCanton\":\"012\"},{\"nombreCanton\":\"Tibas\",\"idCanton\":\"013\"},{\"nombreCanton\":\"Moravia\",\"idCanton\":\"014\"},{\"nombreCanton\":\"Montes de Oca\",\"idCanton\":\"015\"},{\"nombreCanton\":\"Turrubares\",\"idCanton\":\"016\"},{\"nombreCanton\":\"Dota\",\"idCanton\":\"017\"},{\"nombreCanton\":\"Curridabat\",\"idCanton\":\"018\"},{\"nombreCanton\":\"Perez Zeledon\",\"idCanton\":\"019\"},{\"nombreCanton\":\"Leon Cortes\",\"idCanton\":\"020\"}]}"
+    }
+}

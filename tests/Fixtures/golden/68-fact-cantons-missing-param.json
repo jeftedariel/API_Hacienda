@@ -1,0 +1,21 @@
+{
+    "name": "fact-cantons-missing-param",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "get_cantons"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: idProvince\"}"
+    }
+}

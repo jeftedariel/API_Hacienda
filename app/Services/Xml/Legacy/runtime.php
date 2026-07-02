@@ -15,9 +15,7 @@ use App\Legacy\LegacyParams;
  * Excepción que replica el tools_reply($msg, true) del legacy: corta la
  * ejecución y responde {"status":"error","resp":"ERROR: <msg>"} con HTTP 200.
  */
-class LegacyReplyKill extends \RuntimeException
-{
-}
+class LegacyReplyKill extends \RuntimeException {}
 
 /**
  * Holder del set de parámetros de la petición en curso (sustituye al

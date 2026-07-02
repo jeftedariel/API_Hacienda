@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Http;
  * (los golden masters 52-58 golpean los endpoints reales y solo corren con
  * HACIENDA_LIVE_TESTS=1). Las respuestas falsas replican las capturadas.
  */
-
 test('send devuelve HTTP 400 con los headers crudos de Hacienda en text[]', function () {
     Http::fake([
         'api-sandbox.comprobanteselectronicos.go.cr/*' => Http::response(

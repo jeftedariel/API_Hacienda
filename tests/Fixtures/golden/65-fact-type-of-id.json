@@ -1,0 +1,21 @@
+{
+    "name": "fact-type-of-id",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "get_type_of_id"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":[{\"codigo\":\"fisico\",\"descripcion\":\"Fisico\"},{\"codigo\":\"juridico\",\"descripcion\":\"Juridico\"},{\"codigo\":\"dimex\",\"descripcion\":\"DIMEX\"},{\"codigo\":\"nite\",\"descripcion\":\"NITE\"},{\"codigo\":\"extragero\",\"descripcion\":\"extrangero\"}]}"
+    }
+}

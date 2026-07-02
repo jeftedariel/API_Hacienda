@@ -1,0 +1,25 @@
+{
+    "name": "fact-location-info",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "getCompannyLocationInformation",
+            "idProvincia": "1",
+            "idCanton": "01",
+            "idDistrito": "01",
+            "idBarrio": "01"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 403,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Acceso denegado\"}"
+    }
+}

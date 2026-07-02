@@ -1,6 +1,13 @@
 <?php
 
+use App\Models\LegacySession;
+use App\Models\StoredFile;
+use App\Models\User;
+use Database\Seeders\CatalogSeeder;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Testing\TestResponse;
 use Tests\Parity\GoldenFixture;
+use Tests\Support\XmlSignatureVerifier;
 
 /**
  * Tests de paridad contra los golden masters capturados del API legacy
@@ -82,6 +89,20 @@ const IMPLEMENTED = [
     'crlibreall-fe-stub',
     'crypto-makekey',
     'crypto-encrypt-denied',
+    'fact-info',
+    'fact-provinces',
+    'fact-cantons',
+    'fact-districts',
+    'fact-neighborhoods',
+    'fact-type-of-id',
+    'fact-location-info',
+    'fact-cantons-missing-param',
+];
+
+/** Fixtures que requieren los catálogos MH sembrados. */
+const NEEDS_CATALOGS = [
+    'fact-provinces', 'fact-cantons', 'fact-districts', 'fact-neighborhoods',
+    'fact-type-of-id', 'fact-location-info',
 ];
 
 /**
@@ -140,7 +161,7 @@ function assertSignatureMatches(string $expectedBody, string $actualBody, string
     $signed = base64_decode($actual['resp']['xmlFirmado'] ?? '', true);
     expect($signed)->not->toBeFalse("[$context] xmlFirmado no es base64");
 
-    $result = Tests\Support\XmlSignatureVerifier::verify((string) $signed);
+    $result = XmlSignatureVerifier::verify((string) $signed);
     expect($result['ok'])->toBeTrue("[$context] firma inválida: ".implode('; ', $result['errors']));
 }
 
@@ -171,6 +192,10 @@ function assertSendRawMatches(string $expectedBody, string $actualBody, string $
  */
 function seedFixtureState(GoldenFixture $f): void
 {
+    if (in_array($f->name, NEEDS_CATALOGS, true)) {
+        (new CatalogSeeder)->run();
+    }
+
     $needsGoldenUser = in_array($f->name, [
         'users-register-duplicate', 'users-login-wrong-pwd', 'users-login-ok',
         'users-login-email', 'users-get-my-details', 'users-confirm-session',
@@ -182,7 +207,7 @@ function seedFixtureState(GoldenFixture $f): void
         return;
     }
 
-    $user = App\Models\User::create([
+    $user = User::create([
         'full_name' => 'Golden User',
         'user_name' => 'goldenuser',
         'email' => 'golden@example.com',
@@ -199,7 +224,7 @@ function seedFixtureState(GoldenFixture $f): void
     // Sesión válida para la sessionKey exacta que viaja en el request capturado.
     $sessionKey = $f->params['sessionKey'] ?? null;
     if ($sessionKey !== null && $f->name !== 'users-bad-session') {
-        App\Models\LegacySession::create([
+        LegacySession::create([
             'user_id' => $user->id,
             'session_key' => $sessionKey,
             'ip' => '127.0.0.1',
@@ -213,7 +238,7 @@ function seedFixtureState(GoldenFixture $f): void
         $dir = storage_path('app/legacy-files/'.$user->id.'/hacienda');
         @mkdir($dir, 0775, true);
         copy(base_path('legacy/golden/test-cert.p12'), $dir.'/test-cert.p12');
-        App\Models\StoredFile::create([
+        StoredFile::create([
             'user_id' => $user->id,
             'name' => 'test-cert.p12',
             'download_code' => $downloadCode,
@@ -223,7 +248,7 @@ function seedFixtureState(GoldenFixture $f): void
     }
 }
 
-function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
+function callFixture(GoldenFixture $f): TestResponse
 {
     $test = test();
     $uri = '/api.php'.($f->query ? '?'.http_build_query($f->query) : '');
@@ -239,7 +264,7 @@ function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
 
     $files = [];
     foreach ($f->files ?? [] as $field => $basename) {
-        $files[$field] = new Illuminate\Http\UploadedFile(
+        $files[$field] = new UploadedFile(
             base_path('legacy/golden/'.$basename),
             $basename,
             'application/octet-stream',

@@ -1,8 +1,8 @@
 <?php
 
 use App\Services\Signature\XadesSignerService;
-use CRLibre\XmlSecLibs\XMLSecurityDSig;
 use Tests\Parity\GoldenFixture;
+use Tests\Support\XmlSignatureVerifier;
 
 /**
  * Verifica que la firma XAdES-EPES producida por el port sea
@@ -24,7 +24,7 @@ const TEST_PIN = '1234';
 test('la firma XAdES es criptográficamente válida', function () {
     $signed = app(XadesSignerService::class)->sign(TEST_P12, TEST_PIN, goldenFeXml());
 
-    $result = Tests\Support\XmlSignatureVerifier::verify($signed);
+    $result = XmlSignatureVerifier::verify($signed);
     expect($result['ok'])->toBeTrue(implode('; ', $result['errors']));
 });
 
@@ -32,7 +32,7 @@ test('el verificador de tests valida la firma del legacy (control)', function ()
     $legacyResp = json_decode(GoldenFixture::all()['firmar-fe']->expectedBody, true);
     $legacySigned = base64_decode($legacyResp['resp']['xmlFirmado']);
 
-    $result = Tests\Support\XmlSignatureVerifier::verify($legacySigned);
+    $result = XmlSignatureVerifier::verify($legacySigned);
     expect($result['ok'])->toBeTrue(implode('; ', $result['errors']));
 });
 

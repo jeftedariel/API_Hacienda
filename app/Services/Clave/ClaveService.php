@@ -31,8 +31,8 @@ class ClaveService
 
     /**
      * @return array{clave: string, consecutivo: string, length: int}|string
-     *         El array con la clave, o un string con el mensaje de error
-     *         (contrato legacy: los errores de validación son strings).
+     *                                                                       El array con la clave, o un string con el mensaje de error
+     *                                                                       (contrato legacy: los errores de validación son strings).
      */
     public function generate(
         string $tipoDocumento,

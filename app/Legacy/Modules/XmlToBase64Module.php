@@ -14,9 +14,7 @@ use App\Services\Files\FileStorageService;
  */
 class XmlToBase64Module implements LegacyModule
 {
-    public function __construct(private readonly FileStorageService $files)
-    {
-    }
+    public function __construct(private readonly FileStorageService $files) {}
 
     public function routes(): array
     {

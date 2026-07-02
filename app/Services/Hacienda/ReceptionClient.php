@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\Http;
  */
 class ReceptionClient
 {
-    public function __construct(private readonly HaciendaEnvironment $env)
-    {
-    }
+    public function __construct(private readonly HaciendaEnvironment $env) {}
 
     /**
      * @param  array<string, mixed>  $datos  Payload de recepción ya armado.

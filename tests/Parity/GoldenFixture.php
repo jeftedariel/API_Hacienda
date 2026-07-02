@@ -20,8 +20,7 @@ class GoldenFixture
         public readonly int $expectedStatus,
         public readonly ?string $expectedContentType,
         public readonly string $expectedBody,
-    ) {
-    }
+    ) {}
 
     public static function load(string $path): self
     {
