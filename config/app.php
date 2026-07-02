@@ -65,7 +65,9 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // El legacy fijaba America/Costa_Rica en el front controller; la fecha
+    // local forma parte de la clave numérica de los comprobantes.
+    'timezone' => env('APP_TIMEZONE', 'America/Costa_Rica'),
 
     /*
     |--------------------------------------------------------------------------

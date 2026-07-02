@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Legacy\LegacyDispatcher;
 use App\Legacy\Modules\CalaModule;
+use App\Legacy\Modules\ClaveModule;
 use App\Legacy\Modules\EjemploModule;
+use App\Legacy\Modules\GenXmlModule;
 use App\Legacy\Modules\VersionModule;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +22,8 @@ class LegacyServiceProvider extends ServiceProvider
         'cala' => CalaModule::class,
         'version' => VersionModule::class,
         'ejemplo' => EjemploModule::class,
+        'clave' => ClaveModule::class,
+        'genXML' => GenXmlModule::class,
     ];
 
     public function register(): void

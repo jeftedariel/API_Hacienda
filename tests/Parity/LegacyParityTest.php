@@ -20,11 +20,51 @@ const IMPLEMENTED = [
     'version',
     'version-get',
     'unknown-module',
-    // 'unknown-route' usa w=clave: entra con el port del módulo clave (Fase 2)
+    'unknown-route',
     'no-params-at-all',
     'invalid-json-body',
     'ejemplo-hola',
+
+    // Fase 2: núcleo FE
+    'clave-fe-fisico',
+    'clave-te-juridico',
+    'clave-nc-contingencia',
+    'clave-nd-sininternet',
+    'clave-missing-param',
+    'genxml-test',
+    'genxml-fe-full',
+    'genxml-fe-minimal',
+    'genxml-fe-json-body',
+    'genxml-fe-missing-clave',
+    'genxml-nc-full',
+    'genxml-nd-full',
+    'genxml-te-omitir-receptor',
+    'genxml-te-con-receptor',
+    'genxml-fec',
+    'genxml-fee',
+    'genxml-mr-aceptado',
+    'genxml-mr-rechazado',
+    'genxml-mr-missing-param',
 ];
+
+/**
+ * Normalizadores por fixture: neutralizan las partes de la respuesta que
+ * dependen del momento de ejecución (documentado en cada caso).
+ *
+ * La clave numérica lleva la fecha local ddmmyy en las posiciones 4-9;
+ * el resto es determinista.
+ */
+const NORMALIZERS = [
+    'clave-fe-fisico' => 'normalizeClaveDate',
+    'clave-te-juridico' => 'normalizeClaveDate',
+    'clave-nc-contingencia' => 'normalizeClaveDate',
+    'clave-nd-sininternet' => 'normalizeClaveDate',
+];
+
+function normalizeClaveDate(string $body): string
+{
+    return preg_replace('/("clave":")(\d{3})\d{6}/', '$1$2DDMMYY', $body);
+}
 
 function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
 {
@@ -85,8 +125,12 @@ foreach (GoldenFixture::all() as $name => $fixture) {
             "[{$fixture->name}] HTTP status difiere. Body: ".substr($response->getContent(), 0, 300)
         );
 
+        $normalize = NORMALIZERS[$fixture->name] ?? null;
+        $expectedBody = $normalize ? $normalize($fixture->expectedBody) : $fixture->expectedBody;
+        $actualBody = $normalize ? $normalize($response->getContent()) : $response->getContent();
+
         match ($fixture->compare) {
-            'exact', 'json-exact' => expect($response->getContent())->toBe($fixture->expectedBody, "[{$fixture->name}] body difiere"),
+            'exact', 'json-exact' => expect($actualBody)->toBe($expectedBody, "[{$fixture->name}] body difiere"),
             'shape', 'signature' => assertShapeMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
             'status-only' => null,
             default => throw new RuntimeException("Modo compare desconocido: {$fixture->compare}"),
