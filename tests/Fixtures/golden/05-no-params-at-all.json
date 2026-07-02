@@ -1,0 +1,17 @@
+{
+    "name": "no-params-at-all",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "GET",
+        "bodyMode": "form",
+        "params": [],
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "body": "La informacion json enviada contiene errores."
+    }
+}

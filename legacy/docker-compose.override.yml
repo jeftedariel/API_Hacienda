@@ -1,0 +1,9 @@
+# Override para captura de golden masters: monta un .env fijo dentro del
+# contenedor (settings.php lo busca en /var/www/.env) con la cryptoKey y
+# credenciales de BD deterministas usadas por los tests de paridad.
+services:
+  php-apache:
+    volumes:
+      - ./www/settings.php:/var/www/html/settings.php
+      - ./api:/var/www/api
+      - ./golden/.env:/var/www/.env:ro

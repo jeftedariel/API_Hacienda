@@ -1,0 +1,30 @@
+{
+    "name": "genxml-mr-aceptado",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "genXML",
+            "r": "gen_xml_mr",
+            "clave": "50620032400310123456700100001010000000017100000017",
+            "codigo_actividad": "401002",
+            "numero_cedula_emisor": "3101234567",
+            "fecha_emision_doc": "2024-02-07T12:00:00-06:00",
+            "mensaje": "1",
+            "detalle_mensaje": "Acepto por completo",
+            "monto_total_impuesto": "0.00",
+            "total_factura": "1000.00",
+            "numero_cedula_receptor": "206540123",
+            "numero_consecutivo_receptor": "00100001050000000001"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50620032400310123456700100001010000000017100000017\",\"xml\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KICAgIDxNZW5zYWplUmVjZXB0b3IKICAgIHhtbG5zPSJodHRwczovL2Nkbi5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IveG1sLXNjaGVtYXMvdjQuNC9tZW5zYWplUmVjZXB0b3IiCiAgICB4bWxuczp4c2Q9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIgogICAgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+CiAgICA8Q2xhdmU+NTA2MjAwMzI0MDAzMTAxMjM0NTY3MDAxMDAwMDEwMTAwMDAwMDAwMTcxMDAwMDAwMTc8L0NsYXZlPgogICAgPE51bWVyb0NlZHVsYUVtaXNvcj4wMDMxMDEyMzQ1Njc8L051bWVyb0NlZHVsYUVtaXNvcj4KICAgIDxGZWNoYUVtaXNpb25Eb2M+MjAyNC0wMi0wN1QxMjowMDowMC0wNjowMDwvRmVjaGFFbWlzaW9uRG9jPgogICAgPE1lbnNhamU+MTwvTWVuc2FqZT48RGV0YWxsZU1lbnNhamU+QWNlcHRvIHBvciBjb21wbGV0bzwvRGV0YWxsZU1lbnNhamU+PE1vbnRvVG90YWxJbXB1ZXN0bz4wLjAwPC9Nb250b1RvdGFsSW1wdWVzdG8+PENvZGlnb0FjdGl2aWRhZD40MDEwMDI8L0NvZGlnb0FjdGl2aWRhZD4KICAgIDxUb3RhbEZhY3R1cmE+MTAwMC4wMDwvVG90YWxGYWN0dXJhPgogICAgPE51bWVyb0NlZHVsYVJlY2VwdG9yPjAwMDIwNjU0MDEyMzwvTnVtZXJvQ2VkdWxhUmVjZXB0b3I+CiAgICA8TnVtZXJvQ29uc2VjdXRpdm9SZWNlcHRvcj4wMDEwMDAwMTA1MDAwMDAwMDAwMTwvTnVtZXJvQ29uc2VjdXRpdm9SZWNlcHRvcj48L01lbnNhamVSZWNlcHRvcj4=\"}}"
+    }
+}

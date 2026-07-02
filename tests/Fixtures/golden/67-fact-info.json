@@ -1,0 +1,21 @@
+{
+    "name": "fact-info",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "facturador",
+            "r": "info"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"info\":\"Modulo de interface de facturacion\",\"version\":\"V.0.0\"}}"
+    }
+}

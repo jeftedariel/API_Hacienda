@@ -1,0 +1,27 @@
+{
+    "name": "makejson",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "makeJson",
+            "r": "makeJson",
+            "clave": "50620032400310123456700100001010000000017100000017",
+            "fecha": "2024-02-07T12:00:00-06:00",
+            "emi_tipoIdentificacion": "01",
+            "emi_numeroIdentificacion": "3101234567",
+            "recp_tipoIdentificacion": "02",
+            "recp_numeroIdentificacion": "206540123",
+            "comprobanteXml": "PHhtbD5kZW1vPC94bWw+"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50620032400310123456700100001010000000017100000017\",\"fecha\":\"2024-02-07T12:00:00-06:00\",\"emisor\":{\"tipoIdentificacion\":\"01\",\"numeroIdentificacion\":\"3101234567\"},\"receptor\":{\"tipoIdentificacion\":\"02\",\"numeroIdentificacion\":\"206540123\"},\"comprobanteXml\":\"PHhtbD5kZW1vPC94bWw+\"}}"
+    }
+}

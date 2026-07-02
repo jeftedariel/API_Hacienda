@@ -1,0 +1,20 @@
+{
+    "name": "version-get",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "GET",
+        "bodyMode": "form",
+        "params": {
+            "w": "version",
+            "r": "version"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":\"No tiene soporte git.\"}"
+    }
+}

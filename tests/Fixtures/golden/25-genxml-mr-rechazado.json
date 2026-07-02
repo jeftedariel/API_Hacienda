@@ -1,0 +1,30 @@
+{
+    "name": "genxml-mr-rechazado",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "genXML",
+            "r": "gen_xml_mr",
+            "clave": "50620032400310123456700100001010000000017100000017",
+            "codigo_actividad": "401002",
+            "numero_cedula_emisor": "3101234567",
+            "fecha_emision_doc": "2024-02-07T12:00:00-06:00",
+            "mensaje": "3",
+            "detalle_mensaje": "Rechazado por errores",
+            "monto_total_impuesto": "130.00",
+            "total_factura": "1130.00",
+            "numero_cedula_receptor": "206540123",
+            "numero_consecutivo_receptor": "00100001050000000002"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50620032400310123456700100001010000000017100000017\",\"xml\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KICAgIDxNZW5zYWplUmVjZXB0b3IKICAgIHhtbG5zPSJodHRwczovL2Nkbi5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IveG1sLXNjaGVtYXMvdjQuNC9tZW5zYWplUmVjZXB0b3IiCiAgICB4bWxuczp4c2Q9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIgogICAgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+CiAgICA8Q2xhdmU+NTA2MjAwMzI0MDAzMTAxMjM0NTY3MDAxMDAwMDEwMTAwMDAwMDAwMTcxMDAwMDAwMTc8L0NsYXZlPgogICAgPE51bWVyb0NlZHVsYUVtaXNvcj4wMDMxMDEyMzQ1Njc8L051bWVyb0NlZHVsYUVtaXNvcj4KICAgIDxGZWNoYUVtaXNpb25Eb2M+MjAyNC0wMi0wN1QxMjowMDowMC0wNjowMDwvRmVjaGFFbWlzaW9uRG9jPgogICAgPE1lbnNhamU+MzwvTWVuc2FqZT48RGV0YWxsZU1lbnNhamU+UmVjaGF6YWRvIHBvciBlcnJvcmVzPC9EZXRhbGxlTWVuc2FqZT48TW9udG9Ub3RhbEltcHVlc3RvPjEzMC4wMDwvTW9udG9Ub3RhbEltcHVlc3RvPjxDb2RpZ29BY3RpdmlkYWQ+NDAxMDAyPC9Db2RpZ29BY3RpdmlkYWQ+CiAgICA8VG90YWxGYWN0dXJhPjExMzAuMDA8L1RvdGFsRmFjdHVyYT4KICAgIDxOdW1lcm9DZWR1bGFSZWNlcHRvcj4wMDAyMDY1NDAxMjM8L051bWVyb0NlZHVsYVJlY2VwdG9yPgogICAgPE51bWVyb0NvbnNlY3V0aXZvUmVjZXB0b3I+MDAxMDAwMDEwNTAwMDAwMDAwMDI8L051bWVyb0NvbnNlY3V0aXZvUmVjZXB0b3I+PC9NZW5zYWplUmVjZXB0b3I+\"}}"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "clave-missing-param",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "clave",
+            "r": "clave",
+            "tipoCedula": "fisico",
+            "cedula": "702320717",
+            "consecutivo": "0000001030",
+            "situacion": "normal",
+            "codigoSeguridad": "00000030"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: tipoDocumento\"}"
+    }
+}

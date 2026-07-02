@@ -1,0 +1,22 @@
+{
+    "name": "users-login-email",
+    "compare": "shape",
+    "notes": "Login por email; sessionKey aleatoria.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_log_me_in",
+            "userName": "golden@example.com",
+            "pwd": "Golden123*"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"sessionKey\":\"KzA5aHlMb2tsMUtUUkszRjRqbFhSWCt3OXlzcnBVZVBabGRBU3RLZGVya2ZKWExkMTZ6VDdlcjlHVjY4cDloRS9OTkRpS1puOXhmSmRiOGRhelE4eVE9PTo6i7OOinO8TNXWV9+jKonc5w==\",\"userName\":\"goldenuser\",\"idUser\":\"5\"}}"
+    }
+}

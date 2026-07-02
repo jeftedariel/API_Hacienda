@@ -1,0 +1,21 @@
+{
+    "name": "makejson-missing-param",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "makeJson",
+            "r": "makeJson",
+            "clave": "x"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: fecha\"}"
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "genxml-mr-missing-param",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "genXML",
+            "r": "gen_xml_mr",
+            "clave": "506200324003101234567001"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: codigo_actividad\"}"
+    }
+}

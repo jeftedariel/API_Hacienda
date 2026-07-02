@@ -1,0 +1,21 @@
+{
+    "name": "token-missing-params",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "token",
+            "r": "gettoken",
+            "grant_type": "password"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: client_id\"}"
+    }
+}

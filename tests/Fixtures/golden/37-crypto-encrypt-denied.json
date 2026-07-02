@@ -1,0 +1,21 @@
+{
+    "name": "crypto-encrypt-denied",
+    "compare": "exact",
+    "notes": "Ruta con users_noAccess: debe negar acceso.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "crypto",
+            "r": "encrypt",
+            "texto": "hola"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: textEncrypt\"}"
+    }
+}

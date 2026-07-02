@@ -1,0 +1,31 @@
+{
+    "name": "send-mensaje-fake-token",
+    "compare": "send-raw",
+    "notes": " El número de headers varía entre ejecuciones: comparar status+forma general.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "send",
+            "r": "sendMensaje",
+            "token": "fake-token",
+            "clave": "50620032400310123456700100001010000000017100000017",
+            "fecha": "2024-02-07T12:00:00-06:00",
+            "emi_tipoIdentificacion": "01",
+            "emi_numeroIdentificacion": "3101234567",
+            "recp_tipoIdentificacion": "02",
+            "recp_numeroIdentificacion": "206540123",
+            "consecutivoReceptor": "1",
+            "comprobanteXml": "PHhtbC8+",
+            "client_id": "api-stag"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 400,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":[\"HTTP\\/2 401 \\r\",\"date: Thu, 02 Jul 2026 03:21:18 GMT\\r\",\"content-type: application\\/json\\r\",\"content-length: 26\\r\",\"x-amzn-requestid: 0887215f-a686-4267-85c2-4201ce966d62\\r\",\"x-amzn-errortype: UnauthorizedException\\r\",\"x-amz-apigw-id: f27fQFTZIAMEvBw=\\r\",\"x-amzn-trace-id: Root=1-6a45d92e-1744fa1b21be52043f69db31\\r\",\"cf-cache-status: DYNAMIC\\r\",\"server: cloudflare\\r\",\"cf-ray: a14a84ffdd12db5a-SJO\\r\",\"\\r\",\"{\\\"message\\\":\\\"Unauthorized\\\"}\"]}"
+    }
+}

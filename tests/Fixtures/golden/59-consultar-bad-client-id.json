@@ -1,0 +1,24 @@
+{
+    "name": "consultar-bad-client-id",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "consultar",
+            "r": "consultarCom",
+            "token": "x",
+            "clave": "123",
+            "client_id": "api-nope"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":\"Ha ocurrido un error en el client_id.\"}"
+    }
+}

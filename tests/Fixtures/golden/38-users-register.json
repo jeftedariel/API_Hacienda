@@ -1,0 +1,26 @@
+{
+    "name": "users-register",
+    "compare": "shape",
+    "notes": "idUser depende del estado de la BD.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_register",
+            "fullName": "Golden User",
+            "userName": "goldenuser",
+            "email": "golden@example.com",
+            "about": "{}",
+            "country": "crc",
+            "pwd": "Golden123*"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"sessionKey\":\"R2tEWDRKbC9HZ3UxdEdnL0RlWTc4Uy81dmxMdWVVQmQ3Mk9HV1J1R2QweXErRk96clk1K3h0VGU3aW51djQraUZ0SFNua1I3MnZPaU9MNitoZ2o3SlE9PTo69AJaA8JxeUmiESJ9yny6dA==\",\"userName\":\"goldenuser\",\"idUser\":\"5\"}}"
+    }
+}

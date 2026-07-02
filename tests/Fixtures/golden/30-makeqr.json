@@ -1,0 +1,21 @@
+{
+    "name": "makeqr",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "makeQR",
+            "r": "makeQR",
+            "string": "50620032400310123456700100001010000000017100000017"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":\"iVBORw0KGgoAAAANSUhEUgAAAGMAAABjAQMAAAC19SzWAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA6klEQVQ4jdXSuw3EIAwGYJ8o6MgCkViDjpVyCwSyAFmJjjWQWOCuo0DnM8q9msRpzxVfpAj7NwD\\/UgNiAHGz+OCkQATZJkMHTrasMStDf59QzfM5LRX9GYFYq\\/bfznbV5zMl\\/Ey7p14W5p\\/c9jTE3oiX+sEJZJ5Ae5uBk7ICK7hUbqzM6GJ2SQROl1SC1EvdkjiSMuBq8bYBJzBiSdnFV2ZHkqOy4zVuGzvS0NeFK1IejLYPAfLMiXbre++fTe+qv2vICrYbDkWvFfW7F0beUGajOqEl4T22iRX1Qpml4jnRfGttYJvi9B\\/1BEvOT7DnkWTNAAAAAElFTkSuQmCC\"}"
+    }
+}
