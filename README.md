@@ -16,7 +16,10 @@ manteniendo **compatibilidad total** con los clientes del API original.
 | 3 | Integración Hacienda: token, send, consultar, callback | ✅ |
 | 4 | BD nueva + migración de datos + facturador + users + correo | ✅ |
 | 5 | REST v1 + Sanctum + Swagger + endurecimiento de seguridad | ✅ |
-| 6 | Eliminación de `/legacy` | ⏳ |
+| 6 | Eliminación de `/legacy` | ❌ descartada (se conserva por historial) |
+
+> El código original en `/legacy` se mantiene **de forma permanente** como
+> referencia histórica y golden master. No se despliega (ver `legacy/README.md`).
 
 ## API REST v1
 

@@ -21,5 +21,6 @@ docker compose up -d
 # API disponible en http://localhost (ver docker-compose.md)
 ```
 
-Este directorio se eliminará al completar la Fase 6 de la migración
-(ver plan en la raíz del proyecto).
+Este directorio se conserva **de forma permanente** como referencia
+histórica del API original y como golden master de los tests de paridad.
+No debe desplegarse.
