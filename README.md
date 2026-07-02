@@ -14,9 +14,26 @@ manteniendo **compatibilidad total** con los clientes del API original.
 | 1 | Scaffold Laravel 12 + capa de compatibilidad `?w=&r=` | ✅ |
 | 2 | Núcleo FE: clave, genXML (7 tipos, byte-idéntico), firma XAdES, QR | ✅ |
 | 3 | Integración Hacienda: token, send, consultar, callback | ✅ |
-| 4 | BD nueva + migración de datos + facturador + users + correo | 🚧 |
-| 5 | REST v1 + Sanctum + endurecimiento de seguridad | ⏳ |
+| 4 | BD nueva + migración de datos + facturador + users + correo | ✅ |
+| 5 | REST v1 + Sanctum + Swagger + endurecimiento de seguridad | ✅ |
 | 6 | Eliminación de `/legacy` | ⏳ |
+
+## API REST v1
+
+API moderna bajo `/api/v1`, con **tokens Sanctum** de dos tipos (`master` =
+dueño de empresa, `company` = sub-usuario):
+
+- `POST /api/v1/auth/login` y `/api/v1/auth/company/login` emiten el token.
+- **Emisión de comprobantes** (recurso principal): `POST /api/v1/documents`
+  corre el flujo completo clave→XML v4.4→firma XAdES→token→envío a Hacienda→
+  persistencia, reutilizando los mismos servicios que la capa legacy.
+  `GET /api/v1/documents/{id}/status` consulta el estado en Hacienda.
+- CRUD de empresa, credenciales ATV (cifradas), sucursales, terminales,
+  receptores e inventario; catálogos geográficos públicos.
+
+**Swagger/OpenAPI** autogenerado en `/docs/api` (spec en `/docs/api.json`),
+**deshabilitable en producción** con `SCRAMBLE_ENABLED=false`. CORS del REST
+configurable por `CORS_ALLOWED_ORIGINS`; rate limiting en login y emisión.
 
 ## Compatibilidad con clientes existentes
 
