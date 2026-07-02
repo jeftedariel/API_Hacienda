@@ -20,6 +20,7 @@ class LegacyApiController
         try {
             $params = LegacyParams::fromRequest($request);
             $response = $this->dispatcher->dispatch($params);
+            $this->touchLastAccess($params, $request);
         } catch (LegacyDieException $e) {
             $response = LegacyResponse::plainDie($e->getMessage());
         }
@@ -32,5 +33,25 @@ class LegacyApiController
         ]);
 
         return $response;
+    }
+
+    /**
+     * Efecto colateral de _tools_reply(): cada request con sesión refresca
+     * lastAccess de la sesión y del usuario.
+     */
+    private function touchLastAccess(LegacyParams $params, Request $request): void
+    {
+        $sessionKey = (string) $params->get('sessionKey', '');
+        $iam = (string) $params->get('iam', '');
+        if ($sessionKey === '' || $iam === '') {
+            return;
+        }
+
+        try {
+            $auth = app(\App\Services\Auth\LegacyAuthService::class);
+            $auth->touchLastAccess($sessionKey, $auth->loadByUserNameOrEmail($iam));
+        } catch (\Throwable) {
+            // Sin BD disponible no hay sesión que refrescar.
+        }
     }
 }

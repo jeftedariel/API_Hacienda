@@ -25,8 +25,10 @@ class LegacyResponse
         // switch ($response) { case ERROR_USERS_*: ... } — solo aplica a
         // escalares; réplica de la comparación laxa de PHP sobre esos strings.
         if (is_scalar($response)) {
+            // Nota: PHP castea las claves numéricas del array a int, por eso
+            // la comparación es sobre (string) $code.
             foreach (LegacyErrorCode::map() as $code => [$httpStatus, $text]) {
-                if ((string) $response === $code) {
+                if ((string) $response === (string) $code) {
                     $status = $httpStatus;
                     $response = $text;
                     $killMe = true;

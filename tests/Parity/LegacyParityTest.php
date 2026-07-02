@@ -66,6 +66,22 @@ const IMPLEMENTED = [
     'send-te-fake-token',
     'send-mensaje-fake-token',
     'consultar-fake-token',
+
+    // Fase 4: users + files
+    'users-register',
+    'users-register-duplicate',
+    'users-login-wrong-pwd',
+    'users-login-ok',
+    'users-login-email',
+    'users-get-my-details',
+    'users-confirm-session',
+    'users-bad-session',
+    'users-logout',
+    'upload-cert',
+    'xmltobase64-good-code',
+    'crlibreall-fe-stub',
+    'crypto-makekey',
+    'crypto-encrypt-denied',
 ];
 
 /**
@@ -149,6 +165,64 @@ function assertSendRawMatches(string $expectedBody, string $actualBody, string $
     expect($ma[1] ?? null)->toBe($me[1] ?? null, "[$context] código HTTP de Hacienda difiere");
 }
 
+/**
+ * Estado previo que cada fixture con BD necesita (los golden se capturaron
+ * contra el legacy con datos vivos; aquí se recrean equivalentes).
+ */
+function seedFixtureState(GoldenFixture $f): void
+{
+    $needsGoldenUser = in_array($f->name, [
+        'users-register-duplicate', 'users-login-wrong-pwd', 'users-login-ok',
+        'users-login-email', 'users-get-my-details', 'users-confirm-session',
+        'users-bad-session', 'users-logout', 'upload-cert',
+        'xmltobase64-good-code', 'firmar-fe', 'firmar-bad-pin',
+    ], true);
+
+    if (! $needsGoldenUser) {
+        return;
+    }
+
+    $user = App\Models\User::create([
+        'full_name' => 'Golden User',
+        'user_name' => 'goldenuser',
+        'email' => 'golden@example.com',
+        'about' => '{}',
+        'country' => 'crc',
+        'status' => '1',
+        'legacy_timestamp' => time(),
+        'last_access' => time(),
+        'password' => password_hash('Golden123*', PASSWORD_BCRYPT, ['cost' => 4]),
+        'avatar' => '0',
+        'settings' => 'NULL',
+    ]);
+
+    // Sesión válida para la sessionKey exacta que viaja en el request capturado.
+    $sessionKey = $f->params['sessionKey'] ?? null;
+    if ($sessionKey !== null && $f->name !== 'users-bad-session') {
+        App\Models\LegacySession::create([
+            'user_id' => $user->id,
+            'session_key' => $sessionKey,
+            'ip' => '127.0.0.1',
+            'last_access' => time(),
+        ]);
+    }
+
+    // El p12 de prueba registrado con el downloadCode del request capturado.
+    $downloadCode = $f->params['p12Url'] ?? $f->params['downloadCode'] ?? null;
+    if ($downloadCode !== null && in_array($f->name, ['firmar-fe', 'firmar-bad-pin', 'xmltobase64-good-code'], true)) {
+        $dir = storage_path('app/legacy-files/'.$user->id.'/hacienda');
+        @mkdir($dir, 0775, true);
+        copy(base_path('legacy/golden/test-cert.p12'), $dir.'/test-cert.p12');
+        App\Models\StoredFile::create([
+            'user_id' => $user->id,
+            'name' => 'test-cert.p12',
+            'download_code' => $downloadCode,
+            'type' => 'hacienda',
+            'path' => 'legacy-files/'.$user->id.'/hacienda/test-cert.p12',
+        ]);
+    }
+}
+
 function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
 {
     $test = test();
@@ -163,7 +237,17 @@ function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
         );
     }
 
-    return $test->call($f->method, $uri, $f->params ?? []);
+    $files = [];
+    foreach ($f->files ?? [] as $field => $basename) {
+        $files[$field] = new Illuminate\Http\UploadedFile(
+            base_path('legacy/golden/'.$basename),
+            $basename,
+            'application/octet-stream',
+            test: true,
+        );
+    }
+
+    return $test->call($f->method, $uri, $f->params ?? [], [], $files);
 }
 
 function assertShapeMatches(string $expectedBody, string $actualBody, string $context): void
@@ -210,13 +294,7 @@ foreach (GoldenFixture::all() as $name => $fixture) {
             $this->markTestSkipped('Requiere red hacia Hacienda; ejecutar con HACIENDA_LIVE_TESTS=1');
         }
 
-        // Los fixtures de firma referencian el p12 de prueba por downloadCode;
-        // el FileStorageService provisional lo resuelve en storage/app/legacy-files.
-        if (isset($fixture->params['p12Url']) && $fixture->params['p12Url'] !== '') {
-            $dir = storage_path('app/legacy-files');
-            @mkdir($dir, 0775, true);
-            copy(base_path('legacy/golden/test-cert.p12'), $dir.'/'.$fixture->params['p12Url']);
-        }
+        seedFixtureState($fixture);
 
         $response = callFixture($fixture);
 

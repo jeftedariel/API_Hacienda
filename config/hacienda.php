@@ -70,6 +70,9 @@ return [
     'legacy' => [
         'open_endpoints' => env('LEGACY_OPEN_ENDPOINTS', true),
         'crypto_key' => env('LEGACY_CRYPTO_KEY', ''),
+        // Vida de sesión legacy en segundos (variable sessionLifetime del
+        // .env viejo). -1 replica el bug histórico: nunca valida.
+        'session_lifetime' => env('LEGACY_SESSION_LIFETIME', 3600),
         'version_file' => env('LEGACY_VERSION_FILE', base_path('VERSION')),
     ],
 
