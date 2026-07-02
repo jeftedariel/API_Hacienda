@@ -51,16 +51,30 @@ final class CurrentParams
     {
         $previous = self::$params;
         self::$params = $params;
-        set_error_handler(
-            fn (): bool => true,
-            E_WARNING | E_NOTICE | E_DEPRECATED | E_USER_WARNING | E_USER_NOTICE | E_USER_DEPRECATED
-        );
         try {
-            return $fn();
+            return withLegacyErrorSuppression($fn);
         } finally {
-            restore_error_handler();
             self::$params = $previous;
         }
+    }
+}
+
+/**
+ * Ejecuta $fn con los errores no fatales silenciados, como el
+ * error_reporting(0) del legacy. Imprescindible para código portado que
+ * escribe a un output buffer (p. ej. phpqrcode: un Deprecated impreso
+ * dentro del buffer corrompería el PNG).
+ */
+function withLegacyErrorSuppression(\Closure $fn): mixed
+{
+    set_error_handler(
+        fn (): bool => true,
+        E_WARNING | E_NOTICE | E_DEPRECATED | E_USER_WARNING | E_USER_NOTICE | E_USER_DEPRECATED
+    );
+    try {
+        return $fn();
+    } finally {
+        restore_error_handler();
     }
 }
 

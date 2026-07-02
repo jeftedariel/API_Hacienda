@@ -1,0 +1,15 @@
+{
+    "name": "crlibre/xades-xmlseclibs",
+    "description": "Fork de robrichards/xmlseclibs con soporte XAdES-EPES para la firma de comprobantes electrónicos de Costa Rica (formato Hacienda v4.4)",
+    "license": ["BSD-3-Clause", "AGPL-3.0-or-later"],
+    "require": {
+        "php": ">=8.2",
+        "ext-dom": "*",
+        "ext-openssl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "CRLibre\\XmlSecLibs\\": "src/"
+        }
+    }
+}

@@ -3,12 +3,16 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "crlibre/xades-xmlseclibs": "@dev"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -87,5 +91,14 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/crlibre/xades-xmlseclibs",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

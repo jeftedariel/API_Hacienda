@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d19827221388aa0d2cf7abf4ceed48a",
+    "content-hash": "1dbc36f65fd6aeeb79ebebd6d85eafee",
     "packages": [
         {
             "name": "brick/math",
@@ -134,6 +134,35 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "crlibre/xades-xmlseclibs",
+            "version": "dev-feature/laravel-12",
+            "dist": {
+                "type": "path",
+                "url": "packages/crlibre/xades-xmlseclibs",
+                "reference": "2f776c39a62cf57f60ecfd99054c5e12350b59d8"
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-openssl": "*",
+                "php": ">=8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CRLibre\\XmlSecLibs\\": "src/"
+                }
+            },
+            "license": [
+                "BSD-3-Clause",
+                "AGPL-3.0-or-later"
+            ],
+            "description": "Fork de robrichards/xmlseclibs con soporte XAdES-EPES para la firma de comprobantes electrónicos de Costa Rica (formato Hacienda v4.4)",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "dflydev/dot-access-data",
@@ -9400,7 +9429,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "crlibre/xades-xmlseclibs": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -45,6 +45,23 @@ const IMPLEMENTED = [
     'genxml-mr-aceptado',
     'genxml-mr-rechazado',
     'genxml-mr-missing-param',
+    'makejson',
+    'makejson-missing-param',
+    'xmltobase64-bad-code',
+    'makeqr',
+    'firmar-fe',
+    'firmar-bad-pin',
+    'firmar-missing-p12',
+];
+
+/**
+ * Fixtures cuyo comportamiento legacy era un bug irreproducible y se decidió
+ * divergir deliberadamente (documentado en el módulo correspondiente).
+ */
+const INTENTIONALLY_DIVERGENT = [
+    // El módulo check legacy cargaba un fac.xml hardcodeado contra XSD 4.2 y
+    // volcaba warnings HTML; se reimplementó validando contra XSD v4.4.
+    'check-xml-fe' => 'CheckModule reimplementado (legacy roto); ver app/Legacy/Modules/CheckModule.php',
 ];
 
 /**
@@ -64,6 +81,23 @@ const NORMALIZERS = [
 function normalizeClaveDate(string $body): string
 {
     return preg_replace('/("clave":")(\d{3})\d{6}/', '$1$2DDMMYY', $body);
+}
+
+/**
+ * Modo signature: shape del JSON + verificación criptográfica del XML
+ * firmado (la firma incluye SigningTime e IDs aleatorios, no hay paridad
+ * byte a byte posible).
+ */
+function assertSignatureMatches(string $expectedBody, string $actualBody, string $context): void
+{
+    assertShapeMatches($expectedBody, $actualBody, $context);
+
+    $actual = json_decode($actualBody, true);
+    $signed = base64_decode($actual['resp']['xmlFirmado'] ?? '', true);
+    expect($signed)->not->toBeFalse("[$context] xmlFirmado no es base64");
+
+    $result = Tests\Support\XmlSignatureVerifier::verify((string) $signed);
+    expect($result['ok'])->toBeTrue("[$context] firma inválida: ".implode('; ', $result['errors']));
 }
 
 function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
@@ -114,8 +148,20 @@ function shapeOf(mixed $value): mixed
 
 foreach (GoldenFixture::all() as $name => $fixture) {
     test("paridad legacy: {$fixture->file}", function () use ($fixture) {
+        if (isset(INTENTIONALLY_DIVERGENT[$fixture->name])) {
+            $this->markTestSkipped('Divergencia deliberada: '.INTENTIONALLY_DIVERGENT[$fixture->name]);
+        }
+
         if (! in_array($fixture->name, IMPLEMENTED, true)) {
             $this->markTestSkipped("Módulo aún no portado: {$fixture->name}");
+        }
+
+        // Los fixtures de firma referencian el p12 de prueba por downloadCode;
+        // el FileStorageService provisional lo resuelve en storage/app/legacy-files.
+        if (isset($fixture->params['p12Url']) && $fixture->params['p12Url'] !== '') {
+            $dir = storage_path('app/legacy-files');
+            @mkdir($dir, 0775, true);
+            copy(base_path('legacy/golden/test-cert.p12'), $dir.'/'.$fixture->params['p12Url']);
         }
 
         $response = callFixture($fixture);
@@ -131,7 +177,8 @@ foreach (GoldenFixture::all() as $name => $fixture) {
 
         match ($fixture->compare) {
             'exact', 'json-exact' => expect($actualBody)->toBe($expectedBody, "[{$fixture->name}] body difiere"),
-            'shape', 'signature' => assertShapeMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
+            'shape' => assertShapeMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
+            'signature' => assertSignatureMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
             'status-only' => null,
             default => throw new RuntimeException("Modo compare desconocido: {$fixture->compare}"),
         };

@@ -6,7 +6,12 @@ use App\Legacy\LegacyDispatcher;
 use App\Legacy\Modules\CalaModule;
 use App\Legacy\Modules\ClaveModule;
 use App\Legacy\Modules\EjemploModule;
+use App\Legacy\Modules\FirmarXmlModule;
+use App\Legacy\Modules\CheckModule;
 use App\Legacy\Modules\GenXmlModule;
+use App\Legacy\Modules\MakeJsonModule;
+use App\Legacy\Modules\MakeQrModule;
+use App\Legacy\Modules\XmlToBase64Module;
 use App\Legacy\Modules\VersionModule;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +29,11 @@ class LegacyServiceProvider extends ServiceProvider
         'ejemplo' => EjemploModule::class,
         'clave' => ClaveModule::class,
         'genXML' => GenXmlModule::class,
+        'makeJson' => MakeJsonModule::class,
+        'XmlToBase64' => XmlToBase64Module::class,
+        'makeQR' => MakeQrModule::class,
+        'check' => CheckModule::class,
+        'firmarXML' => FirmarXmlModule::class,
     ];
 
     public function register(): void

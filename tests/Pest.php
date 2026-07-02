@@ -1,3 +1,3 @@
 <?php
 
-pest()->extend(Tests\TestCase::class)->in('Feature', 'Parity');
+pest()->extend(Tests\TestCase::class)->in('Feature', 'Parity', 'Unit');
