@@ -64,6 +64,22 @@ return [
             ]) : [],
         ],
 
+        // Conexión de SOLO LECTURA a la base de datos del API legacy, usada
+        // por `php artisan legacy:migrate-data` / `legacy:verify-migration`
+        // para importar los datos al esquema nuevo.
+        'legacy' => [
+            'driver' => 'mysql',
+            'host' => env('LEGACY_DB_HOST', '127.0.0.1'),
+            'port' => env('LEGACY_DB_PORT', '4407'),
+            'database' => env('LEGACY_DB_DATABASE', 'testdb'),
+            'username' => env('LEGACY_DB_USERNAME', 'testuser'),
+            'password' => env('LEGACY_DB_PASSWORD', 'testpassword'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

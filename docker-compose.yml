@@ -1,0 +1,43 @@
+# Stack de desarrollo del API Hacienda (Laravel 12).
+#
+# El stack del API legacy (referencia/golden master) vive aparte en
+# /legacy/docker-compose.yml y expone MariaDB en el puerto 4407, que es el
+# default de la conexión "legacy" usada por `php artisan legacy:migrate-data`.
+services:
+  app:
+    image: php:8.3-cli
+    working_dir: /var/www/html
+    command: >
+      bash -c "docker-php-ext-install pdo_mysql mysqli gd > /dev/null 2>&1 || true;
+               php artisan serve --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_DATABASE: api_hacienda
+      DB_USERNAME: hacienda
+      DB_PASSWORD: hacienda
+      LEGACY_DB_HOST: host.docker.internal
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mysql:
+    image: mariadb:11
+    ports:
+      - "3307:3306"
+    environment:
+      TZ: America/Costa_Rica
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: api_hacienda
+      MYSQL_USER: hacienda
+      MYSQL_PASSWORD: hacienda
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

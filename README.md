@@ -1,179 +1,80 @@
 ![https://crlibre.org](https://crlibre.org/wp-content/uploads/2018/03/cropped-CRLibre-Logo_15-1.png)
 
-## Sobre CRLibre
+# API Hacienda — Facturación Electrónica de Costa Rica (Laravel 12)
 
-Somos una comunidad de individuos y organizaciones que voluntariamente unimos
-esfuerzos para colaborar y compartir conocimiento, crear software libre para
-resolver problemas que enfrentamos en nuestra realidad en Costa Rica.
+Migración a Laravel 12 del [API_Hacienda de CRLibre](https://github.com/CRLibre/API_Hacienda)
+(facturación electrónica v4.4 del Ministerio de Hacienda de Costa Rica),
+manteniendo **compatibilidad total** con los clientes del API original.
 
-[![GitHub](https://img.shields.io/github/license/CRLibre/API_Hacienda.svg)](https://github.com/CRLibre/API_Hacienda/blob/master/LICENSE)
-[![GitHub commit activity the past week, 4 weeks, year](https://img.shields.io/github/commit-activity/y/CRLibre/API_Hacienda.svg?logo=github)](https://github.com/CRLibre/API_Hacienda/commits/master)
-[![GitHub issues](https://img.shields.io/github/issues-raw/CRLibre/API_Hacienda.svg)](https://github.com/CRLibre/API_Hacienda/issues)
-[![GitHub pulls](https://img.shields.io/github/issues-pr/CRLibre/API_Hacienda.svg)](https://github.com/CRLibre/API_Hacienda/pulls)
-[![PHPUnit Tests](https://github.com/CRLibre/API_Hacienda/actions/workflows/phpunit.yml/badge.svg)](https://github.com/CRLibre/API_Hacienda/actions/workflows/phpunit.yml)
-[![Telegram @CRLibreFE](https://img.shields.io/badge/Telegram-%40CRLibreFE-blue.svg?logo=telegram)](https://crlibre.org/chats/)
+## Estado de la migración
 
-En este repositorio estamos creando
-un [API](https://es.wikipedia.org/wiki/Interfaz_de_programaci%C3%B3n_de_aplicaciones "Interfaz de programación de aplicaciones, del inglés Application Programming Interface es un conjunto de subrutinas, funciones y procedimientos que ofrece una pieza de software para ser utilizado por otro software")
+| Fase | Alcance | Estado |
+|------|---------|--------|
+| 0 | Golden masters del API legacy (60 fixtures) | ✅ |
+| 1 | Scaffold Laravel 12 + capa de compatibilidad `?w=&r=` | ✅ |
+| 2 | Núcleo FE: clave, genXML (7 tipos, byte-idéntico), firma XAdES, QR | ✅ |
+| 3 | Integración Hacienda: token, send, consultar, callback | ✅ |
+| 4 | BD nueva + migración de datos + facturador + users + correo | 🚧 |
+| 5 | REST v1 + Sanctum + endurecimiento de seguridad | ⏳ |
+| 6 | Eliminación de `/legacy` | ⏳ |
 
-*
+## Compatibilidad con clientes existentes
 
-*[libre](https://es.wikipedia.org/wiki/Software_libre "El software libre es todo programa informático cuyo código fuente puede ser estudiado, modificado, y utilizado libremente con cualquier fin y redistribuido con o sin cambios o mejoras")
-** y componentes de software para simplificar el proceso de la **Factura
-Electrónica** requerido por el Ministerio de Hacienda de Costa Rica.
+Los clientes siguen llamando `POST/GET /api.php?w=<modulo>&r=<accion>` con los
+mismos parámetros y reciben exactamente las mismas respuestas (formato
+`{status, resp}`, códigos HTTP, y peculiaridades históricas). Esto está
+garantizado por una suite de **tests de paridad golden-master**
+(`tests/Parity/`) capturada del API original en ejecución
+(ver `legacy/golden/README.md`).
 
-#### Documentación general sobre la Factura Electrónica en Costa Rica
+Puntos de entrada:
 
-De forma complementaria al proyecto de este API creamos dos repositorios
-relacionados con la facturación electrónica
+- `public/api.php` — capa de compatibilidad legacy (`routes/legacy.php` →
+  `App\Legacy\*`).
+- `public/index.php` — aplicación Laravel estándar (REST v1 en Fase 5).
 
-* Repositorio de información general del proceso de la facturación
-  electrónica: https://github.com/CRLibre/fe-hacienda-cr-docs
-    * Allí se encuentra un [Diagrama de flujo Factura Electrónica Costa Rica
-      ](https://raw.githubusercontent.com/CRLibre/docs-fe-hacienda-cr/master/diagrama-flujo/Diagrama%20de%20Flujo%20para%20Factura%20Electronica%20Costa%20Rica.png)
-* Archivos y recursos comunes para cualquier
-  proyecto https://github.com/CRLibre/fe-hacienda-cr-misc
+## Desarrollo
 
-### ¿Por qué un API para conectarse a los del Ministerio de Hacienda?
+```bash
+composer install
+cp .env.example .env && php artisan key:generate
+./vendor/bin/pest              # suite completa (unit + feature + paridad)
+php artisan serve              # el API queda en http://localhost:8000/api.php
+```
 
-Para
-la [implementación de la Factura Electrónica](https://www.hacienda.go.cr/docs/N2ComprobantesElectronicos.pdf),
-el Ministerio de Hacienda puso a
-disposición [documentación técnica e interfaces de programación sofisticados](https://atv.hacienda.go.cr/ATV/ComprobanteElectronico/frmAnexosyEstructuras.aspx)
-que muchos programadores encuentran difíciles de comprender y utilizar. Nuestro
-objetivo es crear un software que simplifique el proceso a desarrolladores de
-cumplir con
-las [resoluciones del Ministerio](https://cdn.comprobanteselectronicos.go.cr/xml-schemas/Resoluci%C3%B3n_General_sobre_disposiciones_t%C3%A9cnicas_comprobantes_electr%C3%B3nicos_para_efectos_tributarios.pdf),
-de forma más ágil, desde cualquier lenguaje de programación y sin depender de
-intermediarios al poder instalar esta pieza
-de [software libre](https://es.wikipedia.org/wiki/Software_libre) en un servidor
-propio manteniendo control de sus datos sensibles.
+Con Docker: `docker compose up -d` (app en :8000, MariaDB en :3307).
 
-## Cómo colaborar
+### Tests de paridad contra Hacienda real
 
-* Póngase en contacto con los otros miembros voluntarios de la comunidad.
-    * [Sistema de Preguntas y Respuestas de la Comunidad](https://crlibre.org/qa/)
-    * [Grupos de CHAT de CRLibre.org](https://crlibre.org/chats/)
-    * [Grupo de Facebook CRLibre](https://www.facebook.com/groups/105812240170199/)
+Los fixtures que golpean el sandbox del Ministerio corren solo con:
 
-## Sobre este API
+```bash
+HACIENDA_LIVE_TESTS=1 ./vendor/bin/pest tests/Parity
+```
 
-**Trabajo en proceso [lo estamos creando en conjunto](THANKS.md)**
+### Regenerar golden masters
 
-Esta es una API en PHP, la idea de esto es poder realizar módulos sobre una base
-que maneja ya diferentes aspectos como la conexión a bases de datos y usuarios,
-está basado en [CalaAPI](https://github.com/CRLibre/CalaAPI)
+El código original vive en `/legacy` y es ejecutable con Docker; ver
+`legacy/golden/README.md`.
 
-Se encuentran 2 carpetas, una que se llama api y otra que se llama www
+## Arquitectura
 
-La que se llama api la idea es ubicarla en un lugar en donde no sea accesible, o
-bien, que no sea en el "document root" (ejemplo: public_html)
+- `app/Legacy/` — dispatcher de compatibilidad: réplica exacta del contrato
+  del framework casero original (params, respuestas, códigos de error).
+- `app/Services/` — lógica de dominio compartida por la capa legacy y el
+  REST nuevo: `Clave`, `Xml` (generadores v4.4), `Signature` (XAdES-EPES),
+  `Hacienda` (token/recepción/estado), `Qr`, `Xsd`, `Files`.
+- `packages/crlibre/xades-xmlseclibs` — fork de xmlseclibs con XAdES-EPES
+  como paquete composer interno.
+- `config/hacienda.php` — endpoints del Ministerio, política de firma, SSL.
+- `legacy/` — código PHP vanilla original (solo referencia; se elimina al
+  final de la migración).
 
-La que se llama www contiene un archivo de configuración, en donde se modifican
-aspectos como la conexión a base de datos, nombre del sitio y muy importante, la
-ubicación de en donde se encontrará el resto de cosas o bien, la carpeta api.
+## Documentación sobre la Factura Electrónica en Costa Rica
 
-## Requerimientos mínimos
+- [Información general del proceso](https://github.com/CRLibre/fe-hacienda-cr-docs)
+- [Comunidad CRLibre](https://crlibre.org) · [Telegram @CRLibreFE](https://crlibre.org/chats/)
 
-- PHP >= 5.5.0
-- MySQL o MariaDB ([MySQLi](http://php.net/manual/en/book.mysqli.php))
-- [cURL](http://php.net/manual/en/book.curl.php)
-- [php-xml](http://php.net/manual/en/book.simplexml.php)
-- [OpenSSL](http://php.net/manual/en/book.openssl.php)
+## Licencia
 
-### Conectores/Clientes del API
-
-* Conector en .NET https://github.com/CRLibre/fe-hacienda-cr-dotnet
-* Conector en
-  JavaScript: https://github.com/CRLibre/CalaAPI/tree/master/conectores/js
-
-### Uso del API
-
-* Ver y colaborar documentación
-  en [wiki del API](https://github.com/CRLibre/API_Hacienda/wiki "Wiki CRLibre API_Hacienda")
-*
-
-Documento [Step by Step del API](https://crlibre.org/wp-content/uploads/2018/08/586abf6db6fc1117b60b2753-280x124.png)
-para migrar al wiki.
-
-#### Primeros Pasos
-
-* [Primera petición al API](https://github.com/CRLibre/API_Hacienda/wiki/Primera-petici%C3%B3n-al-API)
-* [Uso de Módulos del API](https://github.com/CRLibre/API_Hacienda/wiki/Uso-de-M%C3%B3dulos-del-API)
-* [Creación de Usuario](https://github.com/CRLibre/API_Hacienda/wiki/Creaci%C3%B3n-de-Usuario)
-* [Login y Logout del API](https://github.com/CRLibre/API_Hacienda/wiki/Login-y-Logout-del-API)
-
-#### Uso de los módulos del API
-
-* Upload del certificado o llave criptográfica
-* Solicitud de Token
-* Solicitud de refrescar token
-* Creación de Clave para los XML de Factura Electrónica
-* Creación de Clave para Nota de Crédito
-* Creación de Clave para Nota de Débito
-* Creación de Clave para Tiquete Electronico
-* Creación de clave para Mensaje Aceptación (Aceptación total, Parcialmente y
-  Rechazo)
-* Creación de xml Factura Electrónica
-* Creación de xml Nota de Crédito
-* Creación de xml Nota de Debito
-* Creación de xml Tiquete Electronico
-* Creación de xml Mensaje Aceptacion
-* Firmado del xml Factura Electrónica
-* Firmado del xml Nota de Crédito
-* Firmado del xml Nota de Debito
-* Firmado del xml Tiquete Electronico
-* Firmado del xml Mensaje de Aceptación
-* Envió a Hacienda del xml de Factura Electrónica, Notas de Crédito, Notas de
-  Debito
-* Envió a Hacienda del xml de Tiquete Electronico
-* Envió a Hacienda del xml de Mensaje Aceptación (Aceptación total, Parcialmente
-  y Rechazo)
-* Consulta de estado de los comprobantes
-
-#### Observations
-
-* ALTER TABLE files MODIFY COLUMN md5 VARCHAR(40);
-
-#### Ejecutar los Test Cases:
-
-Se tiene una carpeta con pruebas unitarias en tests/.
-Las pruebas escritas con PHPUnit, y se pueden ejecutar con el siguiente
-commando:
-```./vendor/bin/phpunit --stderr --debug --bootstrap vendor/autoload.php tests/api_contrib_genXML_FE.php```
-
-Guardando el resultado en un archivo de junit:
-```./vendor/bin/phpunit --log-junit junit-report.xml --stderr --debug --bootstrap vendor/autoload.php tests/api_contrib_genXML_FE.php```
-
-Convertir el archivo junit-report.xml a HTML:
-```junit2html junit-report.xml junit-report.html```
-
-Instalar junit2html:
-```./vendor/bin/junit2html```
-
-Ejecutar test específico:
-
-```./vendor/bin/phpunit --log-junit junit-report.xml --stderr --debug --bootstrap vendor/autoload.php --filter testGenXMLFeFullStructure  tests/api_contrib_genXML_FE.php```
-
-# 📢 Aviso Importante - Licencia y Colaboración Obligatoria 📢
-
-Este proyecto está licenciado bajo la **Licencia GNU Affero General Public
-License v3 (AGPL v3)**.  
-**Todos los usuarios y desarrolladores que utilicen, modifiquen o distribuyan
-este módulo están obligados a colaborar en su mantenimiento y mejora, conforme a
-los términos de la licencia.**
-
-## 🔹 Condiciones principales
-
-- Cualquier modificación o mejora debe ser publicada y compartida con la
-  comunidad bajo la misma licencia AGPL v3.
-- Si el módulo se utiliza en entornos privados o en servicios web, el código
-  fuente debe estar disponible para todos los usuarios que interactúen con él.
-- Se espera que todos los beneficiarios del módulo contribuyan con *
-  *correcciones, mejoras o documentación** para asegurar su evolución y
-  mantenimiento.
-
-💡 _El incumplimiento de estas condiciones podría considerarse una violación de
-los términos de la licencia AGPL v3._
-
----
+AGPL-3.0, igual que el proyecto original de CRLibre.
