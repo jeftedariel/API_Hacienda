@@ -1,0 +1,28 @@
+{
+    "name": "send-te-fake-token",
+    "compare": "send-raw",
+    "notes": " El número de headers varía entre ejecuciones: comparar status+forma general.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "send",
+            "r": "sendTE",
+            "token": "fake-token",
+            "clave": "50620032400310123456700100001040000000021100000021",
+            "fecha": "2024-02-07T12:00:00-06:00",
+            "emi_tipoIdentificacion": "01",
+            "emi_numeroIdentificacion": "3101234567",
+            "comprobanteXml": "PHhtbC8+",
+            "client_id": "api-stag"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 400,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":[\"HTTP\\/2 401 \\r\",\"date: Thu, 02 Jul 2026 03:21:17 GMT\\r\",\"content-type: application\\/json\\r\",\"content-length: 26\\r\",\"x-amzn-requestid: ca10854d-4e7a-438a-917d-b221c56b5914\\r\",\"x-amzn-errortype: UnauthorizedException\\r\",\"x-amz-apigw-id: f27fNH5ooAMEB4w=\\r\",\"x-amzn-trace-id: Root=1-6a45d92d-2f434f3611d1a57e7d34f8ba\\r\",\"cf-cache-status: DYNAMIC\\r\",\"server: cloudflare\\r\",\"cf-ray: a14a84fd7ed392ff-SJO\\r\",\"\\r\",\"{\\\"message\\\":\\\"Unauthorized\\\"}\"]}"
+    }
+}

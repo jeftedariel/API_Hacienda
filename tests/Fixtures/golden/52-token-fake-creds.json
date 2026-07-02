@@ -1,0 +1,25 @@
+{
+    "name": "token-fake-creds",
+    "compare": "shape",
+    "notes": "Credenciales falsas contra el IDP sandbox real. El legacy hace json_decode sobre headers+body (CURLOPT_HEADER truthy) => resp null.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "token",
+            "r": "gettoken",
+            "grant_type": "password",
+            "client_id": "api-stag",
+            "username": "fake@fake.com",
+            "password": "fakepwd"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"error\":\"invalid_grant\",\"error_description\":\"Invalid user credentials\"}}"
+    }
+}

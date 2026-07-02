@@ -1,0 +1,21 @@
+{
+    "name": "callback-hacienda",
+    "compare": "exact",
+    "notes": "Callback asíncrono de Hacienda: w/r por query, cuerpo JSON crudo.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "rawjson",
+        "query": {
+            "w": "callback",
+            "r": "callback"
+        },
+        "params": null,
+        "rawBody": "{\"clave\":\"50620032400310123456700100001010000000017100000017\",\"fecha\":\"2024-02-07T12:05:00-06:00\",\"ind-estado\":\"aceptado\",\"respuesta-xml\":\"PE1lbnNhamVIYWNpZW5kYS8+\"}",
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":202}"
+    }
+}

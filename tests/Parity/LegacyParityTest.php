@@ -52,6 +52,34 @@ const IMPLEMENTED = [
     'firmar-fe',
     'firmar-bad-pin',
     'firmar-missing-p12',
+
+    // Fase 3: integración Hacienda (los deterministas; ver LIVE_ONLY)
+    'token-missing-params',
+    'send-missing-params',
+    'consultar-missing-params',
+    'token-bad-client-id',
+    'consultar-bad-client-id',
+    'callback-hacienda',
+    'token-fake-creds',
+    'token-refresh-fake',
+    'send-fake-token',
+    'send-te-fake-token',
+    'send-mensaje-fake-token',
+    'consultar-fake-token',
+];
+
+/**
+ * Fixtures que golpean los endpoints reales de Hacienda (sandbox). Solo se
+ * ejecutan con HACIENDA_LIVE_TESTS=1; la lógica de mapeo se cubre de forma
+ * determinista en tests/Feature/HaciendaClientsTest.php con Http::fake().
+ */
+const LIVE_ONLY = [
+    'token-fake-creds',
+    'token-refresh-fake',
+    'send-fake-token',
+    'send-te-fake-token',
+    'send-mensaje-fake-token',
+    'consultar-fake-token',
 ];
 
 /**
@@ -100,20 +128,42 @@ function assertSignatureMatches(string $expectedBody, string $actualBody, string
     expect($result['ok'])->toBeTrue("[$context] firma inválida: ".implode('; ', $result['errors']));
 }
 
+/**
+ * Modo send-raw: la respuesta legacy de send incluye los headers HTTP crudos
+ * de Hacienda en text[] y su cantidad varía entre ejecuciones. Se compara
+ * status + que resp sea una lista de strings cuya primera línea es el
+ * status-line HTTP con el mismo código que el golden.
+ */
+function assertSendRawMatches(string $expectedBody, string $actualBody, string $context): void
+{
+    $expected = json_decode($expectedBody, true);
+    $actual = json_decode($actualBody, true);
+
+    expect($actual)->not->toBeNull("[$context] la respuesta no es JSON");
+    expect($actual['status'] ?? null)->toBe($expected['status'], "[$context] status difiere");
+    expect($actual['resp'])->toBeArray("[$context] resp no es lista");
+    expect($actual['resp'][0])->toStartWith('HTTP/', "[$context] primera línea no es status-line");
+
+    preg_match('/HTTP\S* (\d{3})/', $expected['resp'][0], $me);
+    preg_match('/HTTP\S* (\d{3})/', $actual['resp'][0], $ma);
+    expect($ma[1] ?? null)->toBe($me[1] ?? null, "[$context] código HTTP de Hacienda difiere");
+}
+
 function callFixture(GoldenFixture $f): Illuminate\Testing\TestResponse
 {
     $test = test();
+    $uri = '/api.php'.($f->query ? '?'.http_build_query($f->query) : '');
 
     if ($f->bodyMode === 'rawjson') {
         return $test->call(
             'POST',
-            '/api.php',
+            $uri,
             server: ['CONTENT_TYPE' => 'application/json'],
             content: $f->rawBody,
         );
     }
 
-    return $test->call($f->method, '/api.php', $f->params ?? []);
+    return $test->call($f->method, $uri, $f->params ?? []);
 }
 
 function assertShapeMatches(string $expectedBody, string $actualBody, string $context): void
@@ -156,6 +206,10 @@ foreach (GoldenFixture::all() as $name => $fixture) {
             $this->markTestSkipped("Módulo aún no portado: {$fixture->name}");
         }
 
+        if (in_array($fixture->name, LIVE_ONLY, true) && ! env('HACIENDA_LIVE_TESTS')) {
+            $this->markTestSkipped('Requiere red hacia Hacienda; ejecutar con HACIENDA_LIVE_TESTS=1');
+        }
+
         // Los fixtures de firma referencian el p12 de prueba por downloadCode;
         // el FileStorageService provisional lo resuelve en storage/app/legacy-files.
         if (isset($fixture->params['p12Url']) && $fixture->params['p12Url'] !== '') {
@@ -178,6 +232,7 @@ foreach (GoldenFixture::all() as $name => $fixture) {
         match ($fixture->compare) {
             'exact', 'json-exact' => expect($actualBody)->toBe($expectedBody, "[{$fixture->name}] body difiere"),
             'shape' => assertShapeMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
+            'send-raw' => assertSendRawMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
             'signature' => assertSignatureMatches($fixture->expectedBody, $response->getContent(), $fixture->name),
             'status-only' => null,
             default => throw new RuntimeException("Modo compare desconocido: {$fixture->compare}"),

@@ -1,0 +1,25 @@
+{
+    "name": "token-bad-client-id",
+    "compare": "shape",
+    "notes": "client_id desconocido => url null.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "query": null,
+        "params": {
+            "w": "token",
+            "r": "gettoken",
+            "grant_type": "password",
+            "client_id": "api-nope",
+            "username": "x",
+            "password": "y"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":null}"
+    }
+}

@@ -20,16 +20,23 @@ class LegacyParams
     /** @var array<string, mixed> */
     private array $params = [];
 
+    /**
+     * Cuerpo crudo de la petición. Algunos módulos legacy (callback) leían
+     * php://input directamente además de los parámetros.
+     */
+    public readonly string $rawContent;
+
     public const INVALID_JSON_MESSAGE = 'La informacion json enviada contiene errores.';
 
-    private function __construct(array $params)
+    private function __construct(array $params, string $rawContent = '')
     {
         $this->params = $params;
+        $this->rawContent = $rawContent;
     }
 
-    public static function fromArray(array $params): self
+    public static function fromArray(array $params, string $rawContent = ''): self
     {
-        return new self($params);
+        return new self($params, $rawContent);
     }
 
     /**
@@ -37,28 +44,29 @@ class LegacyParams
      */
     public static function fromRequest(Request $request): self
     {
+        $content = (string) $request->getContent();
+
         $get = $request->query->all();
         if (isset($get['w'])) {
-            return new self($get);
+            return new self($get, $content);
         }
 
         // $_POST: form-urlencoded o multipart
         $post = $request->request->all();
         if (isset($post['w'])) {
-            return new self($post);
+            return new self($post, $content);
         }
 
         // Cuerpo crudo (php://input). Para multipart PHP lo deja vacío.
-        $content = (string) $request->getContent();
         $decoded = json_decode($content, true);
         if (is_string($content) && is_array($decoded) && json_last_error() === JSON_ERROR_NONE) {
             if (isset($decoded['w'])) {
-                return new self($decoded);
+                return new self($decoded, $content);
             }
 
             // JSON válido sin 'w': el legacy continúa sin parámetros y cae
             // en el módulo por defecto ('cala').
-            return new self([]);
+            return new self([], $content);
         }
 
         throw new LegacyDieException(self::INVALID_JSON_MESSAGE);
