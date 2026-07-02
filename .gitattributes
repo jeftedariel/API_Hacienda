@@ -1,7 +1,11 @@
-* text=auto
+* text=auto eol=lf
 
-/.gitattributes export-ignore
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
 /.github export-ignore
-/.gitignore export-ignore
-/_config.yml export-ignore
-/api/contrib/version/VERSION export-subst
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore
