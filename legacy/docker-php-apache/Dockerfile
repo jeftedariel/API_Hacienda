@@ -2,7 +2,10 @@ FROM php:7.4.9-apache
 LABEL version="1.1"
 # VOLUME [ "/var/www/html" ]
 # VOLUME [ "/var/www/api" ]
-RUN apt-get update && apt-get -y install libpng-dev curl libcurl4-openssl-dev openssl netcat
+# Debian buster fue archivado; los repos originales ya no existen.
+RUN sed -i 's|deb.debian.org/debian|archive.debian.org/debian|g; s|security.debian.org/debian-security|archive.debian.org/debian-security|g' /etc/apt/sources.list \
+    && sed -i '/buster-updates/d' /etc/apt/sources.list
+RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get -y install libpng-dev curl libcurl4-openssl-dev openssl netcat
 RUN docker-php-ext-install pdo pdo_mysql mysqli gd curl
 RUN a2enmod rewrite
 COPY ./docker-php-apache/docker-entrypoint.sh /usr/local/bin/

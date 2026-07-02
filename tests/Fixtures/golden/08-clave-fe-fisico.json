@@ -1,0 +1,27 @@
+{
+    "name": "clave-fe-fisico",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "clave",
+            "r": "clave",
+            "tipoDocumento": "FE",
+            "tipoCedula": "fisico",
+            "cedula": "702320717",
+            "codigoPais": "506",
+            "consecutivo": "0000001030",
+            "situacion": "normal",
+            "codigoSeguridad": "00000030"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50601072600070232071700100001010000001030100000030\",\"consecutivo\":\"00100001010000001030\",\"length\":50}}"
+    }
+}

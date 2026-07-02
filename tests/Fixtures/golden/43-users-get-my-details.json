@@ -1,0 +1,22 @@
+{
+    "name": "users-get-my-details",
+    "compare": "shape",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_get_my_details",
+            "iam": "goldenuser",
+            "sessionKey": "KzA5aHlMb2tsMUtUUkszRjRqbFhSWCt3OXlzcnBVZVBabGRBU3RLZGVya2ZKWExkMTZ6VDdlcjlHVjY4cDloRS9OTkRpS1puOXhmSmRiOGRhelE4eVE9PTo6i7OOinO8TNXWV9+jKonc5w=="
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"idUser\":\"5\",\"fullName\":\"Golden User\",\"userName\":\"goldenuser\",\"email\":\"golden@example.com\",\"about\":\"{}\",\"country\":\"crc\",\"status\":\"1\",\"timestamp\":\"1782959282\",\"lastAccess\":\"1782959282\",\"pwd\":\"ZGpKd1Z6TjFSeTlYYUZKRmMzbG5kMXB3V0M5emVqaDZjVkkwUlhaS2FVUmpORkppYmxoaGFVVnpRbVF2UlVWMFNYRlhZWHBMZGtkaE9YWlpkVVpTTkVWVk1GQTNibWRVWWpaWGFHUXlWMGxDYTBobFQzYzlQVG82ZjNjNXgxdjRqR3BVZytxajlDYjZaUT09\",\"avatar\":\"0\",\"settings\":\"NULL\"}}"
+    }
+}

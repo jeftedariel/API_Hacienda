@@ -1,0 +1,26 @@
+{
+    "name": "clave-nc-contingencia",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "clave",
+            "r": "clave",
+            "tipoDocumento": "NC",
+            "tipoCedula": "fisico",
+            "cedula": "702320717",
+            "consecutivo": "0000000007",
+            "situacion": "contingencia",
+            "codigoSeguridad": "99999999"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50601072600070232071700100001030000000007299999999\",\"consecutivo\":\"00100001030000000007\",\"length\":50}}"
+    }
+}

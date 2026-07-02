@@ -1,0 +1,26 @@
+{
+    "name": "clave-nd-sininternet",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "clave",
+            "r": "clave",
+            "tipoDocumento": "ND",
+            "tipoCedula": "fisico",
+            "cedula": "702320717",
+            "consecutivo": "0000000008",
+            "situacion": "sininternet",
+            "codigoSeguridad": "11111111"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50601072600070232071700100001020000000008311111111\",\"consecutivo\":\"00100001020000000008\",\"length\":50}}"
+    }
+}

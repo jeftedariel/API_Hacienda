@@ -1,0 +1,51 @@
+{
+    "name": "genxml-te-omitir-receptor",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "genXML",
+            "r": "gen_xml_te",
+            "proveedor_sistemas": "Proveedor XYZ",
+            "codigo_actividad_emisor": "401002",
+            "emisor_nombre": "Empresa XYZ",
+            "emisor_tipo_identif": "01",
+            "emisor_num_identif": "3101234567",
+            "emisor_nombre_comercial": "Comercial XYZ",
+            "emisor_provincia": "3",
+            "emisor_canton": "01",
+            "emisor_distrito": "01",
+            "emisor_barrio": "Barrio01",
+            "emisor_otras_senas": "Dirección de prueba",
+            "emisor_cod_pais_tel": "506",
+            "emisor_tel": "22223333",
+            "emisor_email": "empresa@example.com",
+            "condicion_venta": "01",
+            "plazo_credito": "0",
+            "cod_moneda": "CRC",
+            "tipo_cambio": "1.00",
+            "total_serv_gravados": "10000.00",
+            "total_gravados": "10000.00",
+            "total_ventas": "10000.00",
+            "total_descuentos": "0.00",
+            "total_ventas_neta": "10000.00",
+            "total_impuestos": "1300.00",
+            "total_comprobante": "11300.00",
+            "clave": "50620032400310123456700100001040000000021100000021",
+            "consecutivo": "00100001040000000021",
+            "fecha_emision": "2024-02-07T12:00:00",
+            "medios_pago": "[{\"tipoMedioPago\":\"01\",\"totalMedioPago\":11300}]",
+            "detalles": "[{\"codigoCABYS\":\"8399000000000\",\"cantidad\":1,\"unidadMedida\":\"Sp\",\"detalle\":\"Servicio profesional\",\"precioUnitario\":10000,\"montoTotal\":10000,\"subTotal\":10000,\"baseImponible\":10000,\"impuesto\":[{\"codigo\":\"01\",\"codigoTarifa\":\"08\",\"tarifa\":13,\"monto\":1300}],\"impuestoNeto\":1300,\"montoTotalLinea\":11300}]",
+            "omitir_receptor": "true"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50620032400310123456700100001040000000021100000021\",\"xml\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KICAgIDxUaXF1ZXRlRWxlY3Ryb25pY28KICAgIHhtbG5zPSJodHRwczovL2Nkbi5jb21wcm9iYW50ZXNlbGVjdHJvbmljb3MuZ28uY3IveG1sLXNjaGVtYXMvdjQuNC90aXF1ZXRlRWxlY3Ryb25pY28iCiAgICB4bWxuczp4c2Q9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIgogICAgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSI+CiAgICA8Q2xhdmU+NTA2MjAwMzI0MDAzMTAxMjM0NTY3MDAxMDAwMDEwNDAwMDAwMDAwMjExMDAwMDAwMjE8L0NsYXZlPgogICAgPFByb3ZlZWRvclNpc3RlbWFzPlByb3ZlZWRvciBYWVo8L1Byb3ZlZWRvclNpc3RlbWFzPgogICAgPENvZGlnb0FjdGl2aWRhZEVtaXNvcj40MDEwMDI8L0NvZGlnb0FjdGl2aWRhZEVtaXNvcj4KICAgIDxOdW1lcm9Db25zZWN1dGl2bz4wMDEwMDAwMTA0MDAwMDAwMDAyMTwvTnVtZXJvQ29uc2VjdXRpdm8+CiAgICA8RmVjaGFFbWlzaW9uPjIwMjQtMDItMDdUMTI6MDA6MDA8L0ZlY2hhRW1pc2lvbj4KICAgIDxFbWlzb3I+CiAgICAgICAgPE5vbWJyZT5FbXByZXNhIFhZWjwvTm9tYnJlPgogICAgICAgIDxJZGVudGlmaWNhY2lvbj4KICAgICAgICAgICAgPFRpcG8+MDE8L1RpcG8+CiAgICAgICAgICAgIDxOdW1lcm8+MzEwMTIzNDU2NzwvTnVtZXJvPgogICAgICAgIDwvSWRlbnRpZmljYWNpb24+CiAgICAgICAgPE5vbWJyZUNvbWVyY2lhbD5Db21lcmNpYWwgWFlaPC9Ob21icmVDb21lcmNpYWw+CiAgICAgICAgPFViaWNhY2lvbj4KICAgICAgICAgICAgPFByb3ZpbmNpYT4zPC9Qcm92aW5jaWE+CiAgICAgICAgICAgIDxDYW50b24+MDE8L0NhbnRvbj4KICAgICAgICAgICAgPERpc3RyaXRvPjAxPC9EaXN0cml0bz48QmFycmlvPkJhcnJpbzAxPC9CYXJyaW8+CiAgICAgICAgICAgICAgICA8T3RyYXNTZW5hcz5EaXJlY2Npw7NuIGRlIHBydWViYTwvT3RyYXNTZW5hcz4KICAgICAgICAgICAgPC9VYmljYWNpb24+PENvcnJlb0VsZWN0cm9uaWNvPmVtcHJlc2FAZXhhbXBsZS5jb208L0NvcnJlb0VsZWN0cm9uaWNvPjwvRW1pc29yPgogICAgPENvbmRpY2lvblZlbnRhPjAxPC9Db25kaWNpb25WZW50YT4KICAgICAgICA8UGxhem9DcmVkaXRvPjA8L1BsYXpvQ3JlZGl0bz48RGV0YWxsZVNlcnZpY2lvPgogICAgICAgIDxMaW5lYURldGFsbGU+CiAgICAgICAgICAgIDxOdW1lcm9MaW5lYT4xPC9OdW1lcm9MaW5lYT4KICAgICAgICAgICAgPENvZGlnb0NBQllTPjgzOTkwMDAwMDAwMDA8L0NvZGlnb0NBQllTPgogICAgICAgICAgICA8Q2FudGlkYWQ+MTwvQ2FudGlkYWQ+CiAgICAgICAgICAgIDxVbmlkYWRNZWRpZGE+U3A8L1VuaWRhZE1lZGlkYT4KICAgICAgICAgICAgPERldGFsbGU+U2VydmljaW8gcHJvZmVzaW9uYWw8L0RldGFsbGU+CiAgICAgICAgICAgIDxQcmVjaW9Vbml0YXJpbz4xMDAwMDwvUHJlY2lvVW5pdGFyaW8+CiAgICAgICAgICAgIDxNb250b1RvdGFsPjEwMDAwPC9Nb250b1RvdGFsPjxTdWJUb3RhbD4xMDAwMDwvU3ViVG90YWw+PEJhc2VJbXBvbmlibGU+MTAwMDA8L0Jhc2VJbXBvbmlibGU+CiAgICAgICAgICAgICAgICA8SW1wdWVzdG8+CiAgICAgICAgICAgICAgICAgICAgPENvZGlnbz4wMTwvQ29kaWdvPgogICAgICAgICAgICAgICAgICAgIDxDb2RpZ29UYXJpZmFJVkE+MDg8L0NvZGlnb1RhcmlmYUlWQT4KICAgICAgICAgICAgICAgICAgICA8VGFyaWZhPjEzPC9UYXJpZmE+CiAgICAgICAgICAgICAgICAgICAgPE1vbnRvPjEzMDA8L01vbnRvPgogICAgICAgICAgICAgICAgPC9JbXB1ZXN0bz48SW1wdWVzdG9Bc3VtaWRvRW1pc29yRmFicmljYT48L0ltcHVlc3RvQXN1bWlkb0VtaXNvckZhYnJpY2E+PEltcHVlc3RvTmV0bz4xMzAwPC9JbXB1ZXN0b05ldG8+PE1vbnRvVG90YWxMaW5lYT4xMTMwMDwvTW9udG9Ub3RhbExpbmVhPjwvTGluZWFEZXRhbGxlPjwvRGV0YWxsZVNlcnZpY2lvPgogICAgPFJlc3VtZW5GYWN0dXJhPgogICAgPENvZGlnb1RpcG9Nb25lZGE+CiAgICAgICAgPENvZGlnb01vbmVkYT5DUkM8L0NvZGlnb01vbmVkYT4KICAgICAgICA8VGlwb0NhbWJpbz4xPC9UaXBvQ2FtYmlvPgogICAgPC9Db2RpZ29UaXBvTW9uZWRhPgogICAgICAgIDxUb3RhbFNlcnZHcmF2YWRvcz4xMDAwMC4wMDwvVG90YWxTZXJ2R3JhdmFkb3M+CiAgICAgICAgPFRvdGFsR3JhdmFkbz4xMDAwMC4wMDwvVG90YWxHcmF2YWRvPgogICAgICAgIDxUb3RhbFZlbnRhPjEwMDAwLjAwPC9Ub3RhbFZlbnRhPgogICAgICAgIDxUb3RhbERlc2N1ZW50b3M+MC4wMDwvVG90YWxEZXNjdWVudG9zPgogICAgICAgIDxUb3RhbFZlbnRhTmV0YT4xMDAwMC4wMDwvVG90YWxWZW50YU5ldGE+CiAgICAgICAgPFRvdGFsSW1wdWVzdG8+MTMwMC4wMDwvVG90YWxJbXB1ZXN0bz4KICAgICAgICA8VG90YWxJVkFEZXZ1ZWx0bz4wPC9Ub3RhbElWQURldnVlbHRvPgogICAgICAgICAgICA8TWVkaW9QYWdvPjxUaXBvTWVkaW9QYWdvPjAxPC9UaXBvTWVkaW9QYWdvPjxUb3RhbE1lZGlvUGFnbz4xMTMwMC4wMDwvVG90YWxNZWRpb1BhZ28+PC9NZWRpb1BhZ28+CiAgICAgICAgPFRvdGFsQ29tcHJvYmFudGU+MTEzMDAuMDA8L1RvdGFsQ29tcHJvYmFudGU+CiAgICA8L1Jlc3VtZW5GYWN0dXJhPjxPdHJvcz48L090cm9zPgogICAgPC9UaXF1ZXRlRWxlY3Ryb25pY28+\"}}"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "name": "upload-cert",
+    "compare": "shape",
+    "notes": "downloadCode es md5 aleatorio; comparar shape.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "fileUploader",
+            "r": "subir_certif",
+            "iam": "goldenuser",
+            "sessionKey": "KzA5aHlMb2tsMUtUUkszRjRqbFhSWCt3OXlzcnBVZVBabGRBU3RLZGVya2ZKWExkMTZ6VDdlcjlHVjY4cDloRS9OTkRpS1puOXhmSmRiOGRhelE4eVE9PTo6i7OOinO8TNXWV9+jKonc5w=="
+        },
+        "rawBody": null,
+        "files": {
+            "fileToUpload": "test-cert.p12"
+        }
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"idFile\":\"3\",\"name\":\"test-cert.p12\",\"downloadCode\":\"8ecf407a1578bca7b45fc919da313a00\"}}"
+    }
+}

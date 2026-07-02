@@ -1,0 +1,20 @@
+{
+    "name": "crlibreall-fe-stub",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "crlibreall",
+            "r": "FE"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: tipoDocumento\"}"
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "name": "users-login-wrong-pwd",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_log_me_in",
+            "userName": "goldenuser",
+            "pwd": "incorrecta"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 401,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Informaci\\u00f3n de acceso incorrecta\"}"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "ejemplo-hola",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "ejemplo",
+            "r": "module_hola"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":\"Function not found\"}"
+    }
+}

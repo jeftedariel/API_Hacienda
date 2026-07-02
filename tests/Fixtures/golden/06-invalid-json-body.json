@@ -1,0 +1,17 @@
+{
+    "name": "invalid-json-body",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "rawjson",
+        "params": null,
+        "rawBody": "{esto no es json valido",
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "body": "La informacion json enviada contiene errores."
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "name": "users-login-ok",
+    "compare": "shape",
+    "notes": "sessionKey es aleatoria; comparar shape.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_log_me_in",
+            "userName": "goldenuser",
+            "pwd": "Golden123*"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"sessionKey\":\"T29OZkZLUmxyUlpDMzNGemtWOXI3RFQvTHpaNExuZytCVnJtWFZVbTFGUkg0ZzVsRHorZXRpamJBaUM3eVV0Wlcwb3h5YXgvbElNbnRtV3QxT1VHZ1E9PTo6ZDlBp0MbGxp6rUdW+nqkgQ==\",\"userName\":\"goldenuser\",\"idUser\":\"5\"}}"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "users-register-duplicate",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_register",
+            "fullName": "Golden User",
+            "userName": "goldenuser",
+            "email": "golden@example.com",
+            "about": "{}",
+            "country": "crc",
+            "pwd": "Golden123*"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"code\":\"-304\",\"status\":\"usuario ya existe\"}}"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "name": "clave-te-juridico",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "clave",
+            "r": "clave",
+            "tipoDocumento": "TE",
+            "tipoCedula": "juridico",
+            "cedula": "3101234567",
+            "codigoPais": "506",
+            "consecutivo": "0000000005",
+            "situacion": "normal",
+            "codigoSeguridad": "12345678",
+            "sucursal": "002",
+            "terminal": "00003"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":{\"clave\":\"50601072600310123456700200003040000000005112345678\",\"consecutivo\":\"00200003040000000005\",\"length\":50}}"
+    }
+}

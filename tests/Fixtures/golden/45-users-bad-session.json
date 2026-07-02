@@ -1,0 +1,22 @@
+{
+    "name": "users-bad-session",
+    "compare": "exact",
+    "notes": "Debe dar HTTP 440 sesión no válida.",
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "users",
+            "r": "users_get_my_details",
+            "iam": "goldenuser",
+            "sessionKey": "sessionfalsa123"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 403,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Acceso denegado\"}"
+    }
+}

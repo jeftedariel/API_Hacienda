@@ -1,0 +1,22 @@
+{
+    "name": "firmar-missing-p12",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "firmarXML",
+            "r": "firmar",
+            "pinP12": "1234",
+            "inXml": "PHhtbC8+"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"error\",\"resp\":\"ERROR: Falta el parametro requerido: p12Url\"}"
+    }
+}

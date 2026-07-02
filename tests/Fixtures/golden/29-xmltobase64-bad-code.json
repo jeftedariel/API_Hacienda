@@ -1,0 +1,21 @@
+{
+    "name": "xmltobase64-bad-code",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "XmlToBase64",
+            "r": "encode",
+            "downloadCode": "cafedeadbeef00000000000000000000"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "body": "{\"status\":\"ok\",\"resp\":\"\"}"
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "check-xml-fe",
+    "compare": "exact",
+    "notes": null,
+    "request": {
+        "method": "POST",
+        "bodyMode": "form",
+        "params": {
+            "w": "check",
+            "r": "checkxml",
+            "tipoDocumento": "FE"
+        },
+        "rawBody": null,
+        "files": null
+    },
+    "response": {
+        "status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "body": "<br/>\n<b>Warning 1549</b>: failed to load external entity \"/var/www/html/fac.xml\" on line <b>0</b>\n<br/>\n<b>Error 1872</b>: The document has no document element. on line <b>-1</b>\n{\"status\":\"ok\",\"resp\":null}"
+    }
+}
