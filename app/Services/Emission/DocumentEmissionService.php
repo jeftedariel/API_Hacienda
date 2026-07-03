@@ -225,10 +225,10 @@ class DocumentEmissionService
             'emisor_tipo_identif' => (string) $company->tipo_cedula,
             'emisor_num_identif' => (string) $company->cedula,
             'emisor_nombre_comercial' => (string) $company->nombre_comercial,
-            'emisor_provincia' => (string) $company->id_provincia,
-            'emisor_canton' => (string) $company->id_canton,
-            'emisor_distrito' => (string) $company->id_distrito,
-            'emisor_barrio' => (string) $company->id_barrio,
+            'emisor_provincia' => $this->geoCode($company->id_provincia, 1),
+            'emisor_canton' => $this->geoCode($company->id_canton, 2),
+            'emisor_distrito' => $this->geoCode($company->id_distrito, 2),
+            'emisor_barrio' => $this->barrioName($company),
             'emisor_otras_senas' => (string) $company->sennas,
             'emisor_cod_pais_tel' => (string) $company->tel_cod_pais,
             'emisor_tel' => (string) $company->tel_numero,
@@ -236,5 +236,43 @@ class DocumentEmissionService
             'cod_moneda' => 'CRC',
             'tipo_cambio' => (string) ($company->tipo_cambio ?: '1'),
         ];
+    }
+
+    /**
+     * En v4.4 el Barrio dejó de ser código: es texto descriptivo con mínimo
+     * 5 caracteres. Se resuelve el nombre desde el catálogo de codificación;
+     * sin nombre válido, se omite (el elemento es opcional).
+     */
+    private function barrioName(Company $company): string
+    {
+        if (blank($company->id_barrio) || (int) $company->id_barrio === 0) {
+            return '';
+        }
+
+        $nombre = trim((string) DB::table('codificacion_mh')
+            ->where('id_provincia', $company->id_provincia)
+            ->where('id_canton', $company->id_canton)
+            ->where('id_distrito', $company->id_distrito)
+            ->where('id_barrio', $company->id_barrio)
+            ->value('nombre_barrio'));
+
+        return mb_strlen($nombre) >= 5 ? $nombre : '';
+    }
+
+    /**
+     * Normaliza un código de ubicación al ancho exacto del esquema v4.4
+     * (Provincia \d, Canton/Distrito \d\d). El catálogo legacy mezcla
+     * anchos ("015", "4"); "00" o vacío significa "sin dato" y se devuelve
+     * vacío para que el generador omita el elemento.
+     */
+    private function geoCode(?string $value, int $length): string
+    {
+        $digits = preg_replace('/\D/', '', (string) $value);
+
+        if ($digits === '' || (int) $digits === 0) {
+            return '';
+        }
+
+        return str_pad(ltrim($digits, '0'), $length, '0', STR_PAD_LEFT);
     }
 }
