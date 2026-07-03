@@ -27,6 +27,33 @@ dueño de empresa, `company` = sub-usuario):
 **deshabilitable en producción** con `SCRAMBLE_ENABLED=false`. CORS del REST
 configurable por `CORS_ALLOWED_ORIGINS`; rate limiting en login y emisión.
 
+## Endpoints importantes
+
+| Endpoint | Método | Descripción |
+| --- | --- | --- |
+| `/docs/api` | GET | Documentación Swagger/OpenAPI (spec en `/docs/api.json`) |
+| `/api.php?w=<modulo>&r=<accion>` | GET/POST | Capa de compatibilidad con el API legacy |
+| `/api/v1/auth/register` | POST | Registro de cuenta master |
+| `/api/v1/auth/login` | POST | Login de cuenta master (emite token Sanctum) |
+| `/api/v1/auth/company/login` | POST | Login de sub-usuario de empresa |
+| `/api/v1/auth/me` | GET | Información del principal autenticado |
+| `/api/v1/auth/logout` | POST | Revoca el token actual |
+| `/api/v1/company` | GET/PUT | Datos de la empresa activa |
+| `/api/v1/company/credentials` | GET/PUT | Credenciales ATV (cifradas) |
+| `/api/v1/company/certificate` | POST | Subida del certificado `.p12` |
+| `/api/v1/branches` · `/api/v1/terminals` | GET/POST | Sucursales y terminales |
+| `/api/v1/receivers` | CRUD | Receptores |
+| `/api/v1/products` | CRUD | Inventario |
+| `/api/v1/documents` | GET/POST | Listado y **emisión de comprobantes** |
+| `/api/v1/documents/{id}` | GET | Detalle del comprobante |
+| `/api/v1/documents/{id}/status` | GET | Estado del comprobante en Hacienda |
+| `/api/v1/geo/provinces/...` | GET | Catálogo geográfico (provincias → cantones → distritos → barrios) |
+| `/api/v1/catalogs/{tax-types\|measure-units\|id-types}` | GET | Catálogos de impuestos, unidades y tipos de identificación |
+
+Las rutas bajo `/api/v1` (salvo auth y catálogos públicos) requieren
+`Authorization: Bearer <token>`. Rate limiting: 10 req/min en auth,
+60 req/min en emisión de documentos.
+
 ## Compatibilidad con clientes existentes
 
 Los clientes siguen llamando `POST/GET /api.php?w=<modulo>&r=<accion>` con los

@@ -5,6 +5,7 @@ la misma ha sido desarrollada por la comunidad de CRLibre, comunidad que somos c
 y es por ello que se agradece a TODOS por formar parte de la comunidad en especial a quienes han colaborado en este repositorio:
 
 - Alejandro
+- Jefté Mendoza
 - Andrés Zúñiga
 - David Obando
 - Eduardo Martinez
