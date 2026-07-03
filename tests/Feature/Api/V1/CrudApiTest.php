@@ -1,8 +1,11 @@
 <?php
 
 use App\Models\Company;
+use App\Models\HaciendaCredential;
+use App\Models\StoredFile;
 use App\Models\User;
 use Database\Seeders\CatalogSeeder;
+use Illuminate\Http\UploadedFile;
 
 /**
  * CRUD y catálogos de la API v1.
@@ -75,4 +78,41 @@ test('la ruta de documentación OpenAPI está registrada y protegida', function 
     expect(collect(app('router')->getRoutes())->contains(
         fn ($r) => $r->uri() === 'docs/api.json'
     ))->toBeTrue();
+});
+
+test('sube el certificado .p12 y lo vincula a la credencial del ambiente', function () {
+    [$token, $company] = ownerToken();
+
+    $response = $this->withToken($token)->post('/api/v1/company/certificate', [
+        'environment' => 'stag',
+        'certificate' => UploadedFile::fake()->create('certificado.p12', 10),
+        'pin' => '1234',
+    ], ['Accept' => 'application/json']);
+
+    $response->assertCreated()
+        ->assertJsonPath('environment', 'stag')
+        ->assertJsonPath('has_pin', true);
+
+    $code = $response->json('p12_download_code');
+    $cred = HaciendaCredential::where('company_id', $company->id)->where('environment', 'stag')->firstOrFail();
+    $stored = StoredFile::where('download_code', $code)->first();
+
+    expect($code)->not->toBeEmpty()
+        ->and($cred->p12_download_code)->toBe($code)
+        ->and($cred->pin)->toBe('1234')
+        ->and($stored)->not->toBeNull()
+        ->and(is_file(storage_path('app/'.$stored->path)))->toBeTrue();
+
+    @unlink(storage_path('app/'.$stored->path));
+});
+
+test('rechaza certificados que no son .p12 o .pfx', function () {
+    [$token] = ownerToken();
+
+    $this->withToken($token)->post('/api/v1/company/certificate', [
+        'environment' => 'stag',
+        'certificate' => UploadedFile::fake()->create('malware.exe', 10),
+    ], ['Accept' => 'application/json'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('certificate');
 });

@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CompanyLoginRequest;
 use App\Http\Requests\Api\V1\LoginRequest;
+use App\Http\Requests\Api\V1\RegisterRequest;
 use App\Http\Support\ActingCompany;
+use App\Models\Company;
 use App\Models\CompanyUser;
+use App\Models\User;
 use App\Services\Auth\CompanyUserAuthService;
 use App\Services\Auth\LegacyAuthService;
 use Illuminate\Http\JsonResponse;
@@ -30,6 +33,50 @@ class AuthController extends Controller
         private readonly LegacyAuthService $masterAuth,
         private readonly CompanyUserAuthService $companyAuth,
     ) {}
+
+    /**
+     * Registro de usuario master: crea el usuario, su empresa y devuelve un
+     * token Sanctum (auto-login, como hacía el registro legacy).
+     */
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        $user = User::create([
+            'full_name' => $request->string('full_name')->value(),
+            'user_name' => $request->string('username')->value(),
+            'email' => $request->string('email')->value(),
+            'about' => '',
+            'country' => 'crc',
+            'status' => '1',
+            'legacy_timestamp' => time(),
+            'last_access' => time(),
+            'password' => $this->masterAuth->hash($request->string('password')->value()),
+            'avatar' => '0',
+            'settings' => null,
+        ]);
+
+        $company = Company::create([
+            'owner_user_id' => $user->id,
+            'nombre' => $request->string('company_name')->value() ?: $request->string('full_name')->value(),
+            'email' => $user->email,
+        ]);
+
+        $token = $user->createToken(
+            $request->string('device_name')->value() ?: 'api',
+            ['master']
+        );
+
+        return response()->json([
+            'token' => $token->plainTextToken,
+            'token_type' => 'Bearer',
+            'principal' => 'master',
+            'user' => [
+                'id' => $user->id,
+                'user_name' => $user->user_name,
+                'email' => $user->email,
+                'company_id' => $company->id,
+            ],
+        ], 201);
+    }
 
     /**
      * Login de usuario master (dueño de empresa).

@@ -85,3 +85,46 @@ test('rutas protegidas rechazan sin token', function () {
     $this->getJson('/api/v1/company')->assertStatus(401);
     $this->getJson('/api/v1/documents')->assertStatus(401);
 });
+
+test('register crea usuario master con empresa y devuelve token', function () {
+    $response = $this->postJson('/api/v1/auth/register', [
+        'full_name' => 'Jefte Dariel',
+        'username' => 'jefte',
+        'email' => 'jefte@example.com',
+        'password' => 'super-secreta-1',
+        'company_name' => 'TravelXM',
+        'device_name' => 'factu-hacienda',
+    ]);
+
+    $response->assertCreated()
+        ->assertJsonPath('principal', 'master')
+        ->assertJsonStructure(['token', 'token_type', 'user' => ['id', 'user_name', 'email', 'company_id']]);
+
+    $user = User::where('user_name', 'jefte')->firstOrFail();
+    $company = Company::where('owner_user_id', $user->id)->firstOrFail();
+
+    expect($company->nombre)->toBe('TravelXM')
+        ->and($response->json('user.company_id'))->toBe($company->id);
+
+    // El token emitido funciona de inmediato (auto-login).
+    $this->withToken($response->json('token'))->getJson('/api/v1/auth/me')
+        ->assertOk()->assertJsonPath('user_name', 'jefte');
+});
+
+test('register rechaza usuario o email duplicado', function () {
+    makeMasterUser();
+
+    $this->postJson('/api/v1/auth/register', [
+        'full_name' => 'Otro',
+        'username' => 'owner',
+        'email' => 'nuevo@example.com',
+        'password' => 'super-secreta-1',
+    ])->assertStatus(422)->assertJsonValidationErrors('username');
+
+    $this->postJson('/api/v1/auth/register', [
+        'full_name' => 'Otro',
+        'username' => 'nuevo',
+        'email' => 'owner@example.com',
+        'password' => 'super-secreta-1',
+    ])->assertStatus(422)->assertJsonValidationErrors('email');
+});
