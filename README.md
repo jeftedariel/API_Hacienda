@@ -1,25 +1,14 @@
 ![https://crlibre.org](https://crlibre.org/wp-content/uploads/2018/03/cropped-CRLibre-Logo_15-1.png)
 
-# API Hacienda — Facturación Electrónica de Costa Rica (Laravel 12)
+# API Hacienda — Facturación Electrónica de Costa Rica 
 
-Migración a Laravel 12 del [API_Hacienda de CRLibre](https://github.com/CRLibre/API_Hacienda)
-(facturación electrónica v4.4 del Ministerio de Hacienda de Costa Rica),
-manteniendo **compatibilidad total** con los clientes del API original.
+Migración y modernización del proyecto de [API_Hacienda de CRLibre](https://github.com/CRLibre/API_Hacienda) en Laravel, manteniendo **compatibilidad total** con los clientes del API original.
 
-## Estado de la migración
+Soporte actual para V4.4
 
-| Fase | Alcance | Estado |
-|------|---------|--------|
-| 0 | Golden masters del API legacy (60 fixtures) | ✅ |
-| 1 | Scaffold Laravel 12 + capa de compatibilidad `?w=&r=` | ✅ |
-| 2 | Núcleo FE: clave, genXML (7 tipos, byte-idéntico), firma XAdES, QR | ✅ |
-| 3 | Integración Hacienda: token, send, consultar, callback | ✅ |
-| 4 | BD nueva + migración de datos + facturador + users + correo | ✅ |
-| 5 | REST v1 + Sanctum + Swagger + endurecimiento de seguridad | ✅ |
-| 6 | Eliminación de `/legacy` | ❌ descartada (se conserva por historial) |
 
 > El código original en `/legacy` se mantiene **de forma permanente** como
-> referencia histórica y golden master. No se despliega (ver `legacy/README.md`).
+> referencia histórica y golden master.
 
 ## API REST v1
 
@@ -97,4 +86,22 @@ El código original vive en `/legacy` y es ejecutable con Docker; ver
 
 ## Licencia
 
-AGPL-3.0, igual que el proyecto original de CRLibre.
+Este proyecto está licenciado bajo la **Licencia GNU Affero General Public
+License v3 (AGPL v3)**.  
+**Todos los usuarios y desarrolladores que utilicen, modifiquen o distribuyan
+este módulo están obligados a colaborar en su mantenimiento y mejora, conforme a
+los términos de la licencia.**
+
+## 🔹 Condiciones principales
+
+- Cualquier modificación o mejora debe ser publicada y compartida con la
+  comunidad bajo la misma licencia AGPL v3.
+- Si el módulo se utiliza en entornos privados o en servicios web, el código
+  fuente debe estar disponible para todos los usuarios que interactúen con él.
+- Se espera que todos los beneficiarios del módulo contribuyan con *
+  *correcciones, mejoras o documentación** para asegurar su evolución y
+  mantenimiento.
+
+💡 _El incumplimiento de estas condiciones podría considerarse una violación de
+los términos de la licencia AGPL v3._
+
