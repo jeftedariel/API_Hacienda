@@ -130,3 +130,129 @@ test('emitir sin certificado devuelve 422 con mensaje claro', function () {
         'detalles' => [], 'total_ventas' => '0', 'total_ventas_neta' => '0', 'total_comprobante' => '0',
     ])->assertStatus(422)->assertJsonStructure(['message']);
 });
+
+test('normaliza los códigos de ubicación del emisor al ancho del esquema', function () {
+    (new CatalogSeeder)->run();
+    [$user, $company] = companyWithCredentials();
+
+    // El catálogo legacy mezcla anchos: "015" (3 dígitos) y "4" (1 dígito).
+    $company->update(['id_provincia' => '2', 'id_canton' => '015', 'id_distrito' => '4', 'id_barrio' => '08']);
+
+    // En v4.4 Barrio es texto (minLength 5): sale el nombre del catálogo, no el código.
+    DB::table('codificacion_mh')->insert([
+        'id_provincia' => '2', 'nombre_provincia' => 'Alajuela',
+        'id_canton' => '015', 'nombre_canton' => 'GUATUSO',
+        'id_distrito' => '4', 'nombre_distrito' => 'KATIRA',
+        'id_barrio' => '08', 'nombre_barrio' => 'Llano Bonito 1',
+    ]);
+
+    Http::fake([
+        '*idp*' => Http::response(['access_token' => 'fake-token', 'token_type' => 'bearer'], 200),
+        '*recepcion*' => Http::response('', 202),
+    ]);
+
+    $token = $user->createToken('test', ['master'])->plainTextToken;
+
+    $response = $this->withToken($token)->postJson('/api/v1/documents', [
+        'tipo' => 'FE', 'environment' => 'stag', 'codigoSeguridad' => '12345678',
+        'codigo_actividad_emisor' => '741203',
+        'fecha_emision' => '2024-02-07T12:00:00-06:00', 'condicion_venta' => '01',
+        'medios_pago' => [['tipoMedioPago' => '01', 'totalMedioPago' => 11300.00]],
+        'receptor_nombre' => 'Cliente ABC', 'receptor_tipo_identif' => '01',
+        'receptor_num_identif' => '108880777', 'receptor_email' => 'cliente@example.com',
+        'cod_moneda' => 'CRC', 'tipo_cambio' => '1.00',
+        'total_serv_gravados' => '10000.00', 'total_gravados' => '10000.00',
+        'total_ventas' => '10000.00', 'total_ventas_neta' => '10000.00',
+        'total_impuestos' => '1300.00', 'total_comprobante' => '11300.00',
+        'detalles' => [[
+            'codigoCABYS' => '8399000000000', 'cantidad' => 1, 'unidadMedida' => 'Sp',
+            'detalle' => 'Servicio', 'precioUnitario' => 10000.00, 'montoTotal' => 10000.00,
+            'subTotal' => 10000.00, 'baseImponible' => 10000.00,
+            'impuesto' => [['codigo' => '01', 'codigoTarifa' => '08', 'tarifa' => 13.00, 'monto' => 1300.00]],
+            'impuestoAsumidoEmisorFabrica' => 0.00,
+            'impuestoNeto' => 1300.00, 'montoTotalLinea' => 11300.00,
+        ]],
+    ]);
+
+    $response->assertStatus(201);
+
+    $xml = base64_decode($response->json('xml'));
+
+    expect($xml)->toContain('<Provincia>2</Provincia>')
+        ->toContain('<Canton>15</Canton>')
+        ->toContain('<Distrito>04</Distrito>')
+        ->toContain('<Barrio>Llano Bonito 1</Barrio>');
+});
+
+test('el XML generado valida contra el XSD oficial v4.4', function () {
+    (new CatalogSeeder)->run();
+    [$user, $company] = companyWithCredentials();
+
+    // Réplica del caso real: códigos legacy de ancho mixto y venta a crédito.
+    $company->update(['id_provincia' => '2', 'id_canton' => '015', 'id_distrito' => '04', 'id_barrio' => '08']);
+    DB::table('codificacion_mh')->insert([
+        'id_provincia' => '2', 'nombre_provincia' => 'Alajuela',
+        'id_canton' => '015', 'nombre_canton' => 'GUATUSO',
+        'id_distrito' => '04', 'nombre_distrito' => 'KATIRA',
+        'id_barrio' => '08', 'nombre_barrio' => 'Llano Bonito 1',
+    ]);
+
+    Http::fake([
+        '*idp*' => Http::response(['access_token' => 'fake-token', 'token_type' => 'bearer'], 200),
+        '*recepcion*' => Http::response('', 202),
+    ]);
+
+    $token = $user->createToken('test', ['master'])->plainTextToken;
+
+    // Mismo shape que envía factu-hacienda (crédito con plazo, IVA incluido).
+    $response = $this->withToken($token)->postJson('/api/v1/documents', [
+        'tipo' => 'FE',
+        'environment' => 'stag',
+        'fecha_emision' => '2026-07-02T16:52:05-06:00',
+        'condicion_venta' => '02',
+        'medios_pago' => [['tipoMedioPago' => '01', 'totalMedioPago' => 222]],
+        'detalles' => [[
+            'codigoCABYS' => '8313100000100', 'cantidad' => 1, 'unidadMedida' => 'Sp',
+            'detalle' => 'Servicio de prueba', 'precioUnitario' => 196.46018,
+            'montoTotal' => 196.46018, 'subTotal' => 196.46018,
+            'impuestoAsumidoEmisorFabrica' => 0, 'impuestoNeto' => 25.53982,
+            'montoTotalLinea' => 222, 'baseImponible' => 196.46018,
+            'impuesto' => [['codigo' => '01', 'codigoTarifa' => '08', 'tarifa' => 13, 'monto' => 25.53982]],
+        ]],
+        'total_ventas' => 196.46018,
+        'total_ventas_neta' => 196.46018,
+        'total_comprobante' => 222,
+        'params' => [
+            'codigo_actividad_emisor' => '6201.0',
+            'plazo_credito' => '30',
+            'total_serv_gravados' => 196.46018,
+            'total_gravados' => 196.46018,
+            'total_impuestos' => 25.53982,
+            'totalDesgloseImpuesto' => json_encode([
+                ['Codigo' => '01', 'CodigoTarifaIVA' => '08', 'TotalMontoImpuesto' => 25.53982],
+            ]),
+        ],
+        'receptor_nombre' => 'Jefte',
+        'receptor_tipo_identif' => '01',
+        'receptor_num_identif' => '208830333',
+        'receptor_email' => 'cliente@example.com',
+    ]);
+
+    $response->assertStatus(201);
+
+    $xmlCrudo = base64_decode($response->json('xml'));
+    expect($xmlCrudo)->toContain('<CodigoActividadEmisor>6201.0</CodigoActividadEmisor>')
+        ->toContain('<TotalDesgloseImpuesto>');
+
+    $dom = new DOMDocument;
+    $dom->loadXML(base64_decode($response->json('xml')));
+
+    libxml_use_internal_errors(true);
+    $valid = $dom->schemaValidate(base_path('legacy/www/xsd/FacturaElectronica_V4.4-noSign.xsd'));
+    $errores = collect(libxml_get_errors())
+        ->map(fn ($e) => trim($e->message).' (línea '.$e->line.')')
+        ->implode("\n");
+    libxml_clear_errors();
+
+    $this->assertTrue($valid, "El XML no valida contra el XSD v4.4:\n".$errores);
+});

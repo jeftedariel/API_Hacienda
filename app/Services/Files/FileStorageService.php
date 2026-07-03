@@ -84,10 +84,18 @@ class FileStorageService
 
         $relativeDir = 'legacy-files/'.$user->id.'/'.$type;
         $downloadCode = $this->createDownloadCode($name, $user->id);
+        $size = (int) $file->getSize();
 
-        try {
-            $file->storeAs($relativeDir, $name, ['disk' => 'local']);
-        } catch (\Throwable) {
+        // Directo a storage/app: el disco "local" tiene root en app/private,
+        // pero findPathByDownloadCode() y la emisión leen storage_path('app/'.path).
+        // copy (no move): el archivo fuente no se toca.
+        $targetDir = storage_path('app/'.$relativeDir);
+
+        if (! is_dir($targetDir) && ! @mkdir($targetDir, 0775, recursive: true)) {
+            return self::ERROR_UPLOAD;
+        }
+
+        if (! @copy($file->getRealPath(), $targetDir.'/'.$name)) {
             return self::ERROR_UPLOAD;
         }
 
@@ -96,7 +104,7 @@ class FileStorageService
             [
                 'md5' => md5_file(storage_path('app/'.$relativeDir.'/'.$name)) ?: '',
                 'legacy_timestamp' => time(),
-                'size' => (int) $file->getSize(),
+                'size' => $size,
                 'download_code' => $downloadCode,
                 'file_type' => '',
                 'path' => $relativeDir.'/'.$name,

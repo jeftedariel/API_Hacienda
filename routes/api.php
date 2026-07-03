@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     // Autenticación (login con rate limiting para frenar fuerza bruta).
     Route::middleware('throttle:10,1')->group(function () {
+        Route::post('auth/register', [AuthController::class, 'register']);
         Route::post('auth/login', [AuthController::class, 'login']);
         Route::post('auth/company/login', [AuthController::class, 'companyLogin']);
     });
@@ -46,6 +47,7 @@ Route::prefix('v1')->group(function () {
         // Credenciales ATV.
         Route::get('company/credentials', [CredentialController::class, 'index']);
         Route::put('company/credentials', [CredentialController::class, 'upsert']);
+        Route::post('company/certificate', [CredentialController::class, 'uploadCertificate']);
 
         // Sucursales y terminales.
         Route::get('branches', [BranchController::class, 'index']);
