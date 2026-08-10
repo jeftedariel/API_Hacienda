@@ -5,13 +5,13 @@
 # default de la conexión "legacy" usada por `php artisan legacy:migrate-data`.
 services:
   app:
-    image: php:8.3-cli
+    image: php:8.4-cli
     working_dir: /var/www/html
     command: >
       bash -c "docker-php-ext-install pdo_mysql mysqli gd > /dev/null 2>&1 || true;
                php artisan serve --host 0.0.0.0 --port 8000"
     ports:
-      - "8000:8000"
+      - "8888:8000"
     volumes:
       - ./:/var/www/html
     environment:
