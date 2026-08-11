@@ -22,7 +22,7 @@ services:
       bash -c "docker-php-ext-install pdo_mysql mysqli gd > /dev/null 2>&1 || true;
                php artisan serve --host 0.0.0.0 --port 8000"
     ports:
-      - "8888:8000"
+      - "127.0.0.1:8888:8000"
     volumes:
       - ./:/var/www/html
     environment:
@@ -43,7 +43,7 @@ services:
   mysql:
     image: mariadb:11
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"
     environment:
       TZ: America/Costa_Rica
       MYSQL_ROOT_PASSWORD: root
